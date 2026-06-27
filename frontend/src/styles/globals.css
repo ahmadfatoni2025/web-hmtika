@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: "Playfair Display", serif;
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+
+  --color-bg-dark: #050505;
+  --color-bg-elevated: #0a0a0a;
+  --color-bg-card: #0f0f0f;
+
+  --color-amber-gold: #d4a853;
+  --color-amber-gold-light: #e8c46e;
+  --color-amber-gold-dark: #b08a3a;
+}
+
+body {
+  font-family: var(--font-heading), Arial, Helvetica, sans-serif;
+  background-color: #050505;
+  color: #f3f4f6;
+}
+
+/* Subtle noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px;
+}
+
+/* Premium Glassmorphism */
+.glass-premium {
+  background: linear-gradient(145deg,
+      rgba(15, 15, 15, 0.7) 0%,
+      rgba(5, 5, 5, 0.9) 100%);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-glowing {
+  background: linear-gradient(145deg,
+      rgba(20, 20, 20, 0.8) 0%,
+      rgba(10, 10, 10, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-glowing:hover {
+  border-color: rgba(212, 168, 83, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 168, 83, 0.05);
+  transform: translateY(-4px);
+}
+
+/* Animations */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+}
+
+@keyframes float-reverse {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(8px) rotate(-0.5deg);
+  }
+}
+
+@keyframes beam-breathe {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(1) translateX(-50%);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scaleY(1.08) translateX(-50%);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-reverse 7s ease-in-out infinite;
+  animation-delay: 1.5s;
+}
+
+.animate-beam {
+  animation: beam-breathe 8s ease-in-out infinite;
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
