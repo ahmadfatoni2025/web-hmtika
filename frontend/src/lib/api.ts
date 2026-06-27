@@ -1,4 +1,5 @@
 export interface NewsItem {
+  data: NewsItem
   id: number
   slug: string
   judul: string
@@ -6,9 +7,17 @@ export interface NewsItem {
   kategori: string
   tglPublish?: string
   createdAt?: string
+  thumbnail?: string
+  konten?: string
+  author?: {
+    id: number
+    nama: string
+    foto?: string
+  }
 }
 
 export interface EventItem {
+  data: EventItem
   id: number
   slug: string
   judul: string
@@ -16,6 +25,12 @@ export interface EventItem {
   tanggal: string
   kuota: number
   biaya: number
+  deskripsi?: string
+  thumbnail?: string
+  tanggalAkhir?: string
+  status?: string
+  kategori?: string
+  registration_count?: number
 }
 
 export interface PaginatedResponse<T> {
@@ -29,8 +44,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api"
 
 async function fetchAPI<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`, {
-    headers: { "Content-Type": "application/json", ...options?.headers },
     ...options,
+    headers: { "Content-Type": "application/json", ...options?.headers },
   })
   if (!res.ok) throw new Error(`API error: ${res.status}`)
   return res.json()

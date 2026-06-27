@@ -116,7 +116,7 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
               className="inline-flex justify-center items-center rounded-full border border-white/15 bg-white/[0.04] py-2 px-4 text-xs font-semibold text-white tracking-wide transition-all"
             >
-              Login/Register
+              Login
             </Link>
           </div>
         </div>

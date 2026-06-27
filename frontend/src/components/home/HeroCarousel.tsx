@@ -32,11 +32,10 @@ export default function HeroThumbnails() {
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`h-12 w-12 rounded-full bg-gradient-to-br ${t.color} transition-all duration-300 ${
-              i === active
+            className={`h-12 w-12 rounded-full bg-linear-to-br ${t.color} transition-all duration-300 ${i === active
                 ? "scale-110 ring-2 ring-white ring-offset-2 ring-offset-transparent"
                 : "scale-100 opacity-60 hover:opacity-90"
-            }`}
+              }`}
             title={t.label}
           />
         ))}
