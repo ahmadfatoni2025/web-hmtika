@@ -5,6 +5,7 @@ import Link from "next/link"
 import { getNews, getEvents, getAspirations } from "@/lib/api"
 import type { NewsItem, EventItem, AspirationItem } from "@/lib/api"
 import HeroSection from "@/components/home/HeroSection"
+import FloatingData from "@/components/home/FloatingData"
 
 export default function Home() {
   // API states
@@ -116,98 +117,7 @@ export default function Home() {
           <HeroSection />
 
           {/* ── THREE FLOATING STAT/DATA CARDS (API Integration) ── */}
-          <div className="relative w-full max-w-4xl min-h-[380px] md:min-h-[460px] mt-12 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4 z-10 px-4">
-
-            {/* Left Card: News Feed */}
-            <div className="w-full max-w-[270px] glass-card-glowing rounded-2xl p-5 md:-rotate-3 md:translate-y-12 md:-mr-6 z-10 self-center border border-white/5 animate-float">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-800 border border-white/10 text-xs font-bold text-zinc-400">📰</span>
-                  <div>
-                    <h3 className="text-xs font-bold text-white leading-none">Berita HMTIKA</h3>
-                    <span className="text-[10px] text-zinc-500">NEWS FEED</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
-                  Terbaru
-                </span>
-              </div>
-              <div className="space-y-1 mb-4">
-                <p className="text-[13px] font-bold text-white leading-snug line-clamp-2">{latestNewsItem.judul}</p>
-                <p className="text-[10px] text-zinc-500">Kategori: {latestNewsItem.kategori}</p>
-              </div>
-              {/* Fake Chart sparkline showing activity */}
-              <div className="h-10 w-full flex items-end gap-1.5 pt-2">
-                {[35, 48, 55, 60, 42, 68, 50, 75, 90].map((h, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-t-sm bg-gradient-to-t from-amber-500/10 to-amber-500/50"
-                    style={{ height: `${h}%` }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Middle Prominent Card: Aspirasi Mahasiswa */}
-            <div className="w-full max-w-[310px] glass-card-glowing border border-white/10 rounded-2xl p-6 shadow-2xl md:-translate-y-2 z-20 self-center hover:scale-[1.03] transition-all duration-300">
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-500">💬</span>
-                  <div>
-                    <h3 className="text-xs font-bold text-white leading-none">Aspirasi Masuk</h3>
-                    <span className="text-[10px] text-zinc-500">STUDENT VOICE</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
-                  {resolvedPercentage}% Resolved
-                </span>
-              </div>
-              <div className="space-y-1 mb-6">
-                <p className="text-2xl md:text-3xl font-black text-white leading-tight">
-                  {totalAspirations || 48} Aspirasi
-                </p>
-                <p className="text-xs text-zinc-500 line-clamp-1">Kategori: {latestAspirationItem.kategori}</p>
-              </div>
-
-              {/* Resolution percentage slider */}
-              <div className="space-y-2">
-                <div className="h-1.5 w-full bg-zinc-800 rounded-full relative overflow-hidden">
-                  <div
-                    className="absolute top-0 bottom-0 left-0 bg-amber-500 rounded-full transition-all duration-1000"
-                    style={{ width: `${resolvedPercentage}%` }}
-                  />
-                </div>
-                <div className="flex justify-between text-[9px] text-zinc-500">
-                  <span>Pending: {totalAspirations - resolvedCount || 12}</span>
-                  <span>Resolved: {resolvedCount || 36}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Card: E-Sertifikat */}
-            <div className="w-full max-w-[270px] glass-card-glowing rounded-2xl p-5 md:rotate-3 md:translate-y-12 md:-ml-6 z-10 self-center border border-white/5 animate-float-delayed">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-800 border border-white/10 text-xs font-bold text-zinc-400">🎓</span>
-                  <div>
-                    <h3 className="text-xs font-bold text-white leading-none">E-Sertifikat</h3>
-                    <span className="text-[10px] text-zinc-500">VERIFICATION</span>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-400 border border-emerald-500/20">
-                  100% Sah
-                </span>
-              </div>
-              <div className="space-y-1 mb-4">
-                <p className="text-[13px] font-bold text-white leading-snug">Kode Digital Autentik</p>
-                <p className="text-[10px] font-mono text-zinc-500">HMTIKA/2026/D3B92A7C</p>
-              </div>
-              <p className="text-[10px] text-zinc-400 leading-normal">
-                Verifikasi keaslian sertifikat kegiatan Anda langsung secara online.
-              </p>
-            </div>
-
-          </div>
+          <FloatingData />
 
         </div>
 

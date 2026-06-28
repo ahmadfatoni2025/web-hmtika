@@ -23,6 +23,7 @@ app.use("/api/attendances", require("./routes/attendance.routes"));
 app.use("/api/logs", require("./routes/attendanceLog.routes"));
 app.use("/api/certificates", require("./routes/certificate.routes"));
 app.use("/api/aspirations", require("./routes/aspiration.routes"));
+app.use("/api/images", require("./routes/image.routes"));
 
 app.get("/", (req, res) => {
   res.json({
@@ -38,6 +39,7 @@ app.get("/", (req, res) => {
       logs: "/api/logs",
       certificates: "/api/certificates",
       aspirations: "/api/aspirations",
+      images: "/api/images",
       health: "/api/health",
     },
   });

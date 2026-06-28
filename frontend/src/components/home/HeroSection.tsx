@@ -3,14 +3,8 @@ import Link from "next/link";
 export default function HeroSection() {
     return (
         <>
-            <div className="inline-flex items-center gap-2 rounded-full border mt-20 border-black/60 bg-black/80 px-4 py-1.5 text-xs text-zinc-100 backdrop-blur-md shadow-lg shadow-black/45">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-100">◎ Info</span>
-                <span className="w-1 h-1 rounded-full bg-zinc-700" />
-                <span className="text-[11px] font-medium text-zinc-100">Portal Resmi HMTIKA STIMIK Tunas Bangsa →</span>
-            </div>
-
             {/* Hero Typography Heading */}
-            <div className="space-y-4 text-center max-w-3xl">
+            <div className="space-y-4 mt-18 text-center max-w-3xl">
                 <h1 className="text-4xl sm:text-6xl md:text-[76px] font-normal leading-[1.08] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
                     <span className="font-display block italic font-light tracking-wide text-zinc-100">Jangan lupa</span>
                     <span className="font-sans font-black uppercase bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">Titik Koma</span>
