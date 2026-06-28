@@ -66,11 +66,11 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/tentang", label: "Tentang" },
     { href: "/event", label: "Event" },
-    { href: "/galeri", label: "Galeri" },
+    { href: "/galery", label: "Galeri" },
     { href: "/aspirasi", label: "Aspirasi" },
     { href: "/sertifikat", label: "Sertifikat" },
+    { href: "/devisi", label: "Devisi" },
     { href: "/tentang", label: "Tentang" },
 
   ]
@@ -87,10 +87,10 @@ export default function Navbar() {
             <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
             <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
           </svg>
-          <span className="text-sm text-zinc-400">
+          <span className="font-heading text-sm text-zinc-400">
             Jangan lupa follow media sosial <span className="font-semibold text-zinc-200">HMTIKA</span> Karena banyak hal yang seru !
           </span>
-          <Link href="https://www.instagram.com/hmtika.sttb" className="group inline-flex items-center gap-1.5 text-sm font-medium text-amber-gold hover:text-amber-gold-light transition-colors shrink-0">
+          <Link href="https://www.instagram.com/hmtika.sttb" className="group inline-flex items-center gap-1.5 font-heading text-sm font-semibold text-amber-gold hover:text-amber-gold-light transition-colors shrink-0 underline">
             Instagram
             <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" />
           </Link>
@@ -117,7 +117,7 @@ export default function Navbar() {
               </svg>
               <div className="absolute inset-0 bg-amber-gold/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300" />
             </div>
-            <span className="font-sans font-bold tracking-tight text-white text-base">HMTIKA</span>
+            <span className="font-heading font-semibold tracking-tight text-white text-base">HMTIKA</span>
           </Link>
 
           {/* Desktop Nav Links (hidden below lg) */}
@@ -126,7 +126,7 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="flex items-center gap-1 text-sm font-medium text-zinc-400 hover:text-amber-gold transition-colors duration-200"
+                className="font-heading flex items-center gap-1 text-sm font-semibold text-zinc-400 hover:text-amber-gold transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -139,7 +139,7 @@ export default function Navbar() {
 
             <Link
               href="/login"
-              className="hidden lg:inline-flex rounded-full border border-white/15 bg-white/10 px-5 py-1.5 text-xs font-semibold text-white tracking-wide transition-all hover:bg-white/20 hover:border-white/30"
+              className="font-heading hidden lg:inline-flex rounded-full border border-white/15 bg-white/10 px-5 py-1.5 text-xs font-semibold text-white tracking-wide transition-all hover:bg-white/20 hover:border-white/30"
             >
               Masuk
             </Link>
@@ -170,7 +170,7 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-1 text-zinc-400 hover:text-amber-gold py-1 transition-colors"
+                className="font-heading flex items-center gap-1 text-zinc-400 hover:text-amber-gold py-1 transition-colors"
               >
                 {link.label}
               </Link>
@@ -179,7 +179,7 @@ export default function Navbar() {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="inline-flex justify-center items-center rounded-full border border-white/15 bg-white/10 py-2 px-4 text-xs font-semibold text-white tracking-wide transition-all"
+              className="font-heading inline-flex justify-center items-center rounded-full border border-white/15 bg-white/10 py-2 px-4 text-xs font-semibold text-white tracking-wide transition-all"
             >
               Masuk
             </Link>

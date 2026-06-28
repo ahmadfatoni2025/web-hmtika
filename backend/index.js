@@ -24,6 +24,8 @@ app.use("/api/logs", require("./routes/attendanceLog.routes"));
 app.use("/api/certificates", require("./routes/certificate.routes"));
 app.use("/api/aspirations", require("./routes/aspiration.routes"));
 app.use("/api/images", require("./routes/image.routes"));
+app.use("/api/divisions", require("./routes/division.routes"));
+app.use("/api/members", require("./routes/member.routes"));
 
 app.get("/", (req, res) => {
   res.json({
@@ -40,6 +42,8 @@ app.get("/", (req, res) => {
       certificates: "/api/certificates",
       aspirations: "/api/aspirations",
       images: "/api/images",
+      divisions: "/api/divisions",
+      members: "/api/members",
       health: "/api/health",
     },
   });

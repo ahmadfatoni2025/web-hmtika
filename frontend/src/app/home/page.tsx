@@ -6,6 +6,7 @@ import { getNews, getEvents, getAspirations } from "@/lib/api"
 import type { NewsItem, EventItem, AspirationItem } from "@/lib/api"
 import HeroSection from "@/components/home/HeroSection"
 import FloatingData from "@/components/home/FloatingData"
+import Collaborators from "@/components/home/Collaborators"
 
 export default function Home() {
   // API states
@@ -118,26 +119,11 @@ export default function Home() {
 
           {/* ── THREE FLOATING STAT/DATA CARDS (API Integration) ── */}
           <FloatingData />
-
-        </div>
-
-      </section>
-
-      {/* ── TRUSTED BY / PARTNERS SECTION ── */}
-      <section className="relative w-full py-10 overflow-hidden border-t border-b border-white/[0.04]">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col items-center gap-6">
-          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500 text-center">
-            Kolaborasi & Kemitraan Strategis
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-6 opacity-35 hover:opacity-70 transition-opacity duration-300">
-            <span className="text-base font-semibold tracking-tight text-white">Google Developer Groups</span>
-            <span className="text-base font-serif font-bold italic tracking-wide text-white">GitHub Campus</span>
-            <span className="text-base font-sans font-black text-white">Dicoding Academy</span>
-            <span className="text-base font-sans font-light tracking-widest uppercase text-white">Microsoft Learn</span>
-            <span className="text-base font-serif font-semibold text-white">STIMIK Tunas Bangsa</span>
-          </div>
         </div>
       </section>
+
+      {/* Kolaborasi */}
+      <Collaborators />
 
       {/* ── FEATURES GRID SECTION (Populated from API) ── */}
       <section id="enterprise" className="w-full py-24 px-6 relative overflow-hidden">
