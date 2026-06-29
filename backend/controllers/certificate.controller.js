@@ -5,13 +5,12 @@ exports.getMyCertificates = async (req, res) => {
   try {
     const result = await db.query(
       `SELECT ec.*, e.id AS event_id, e.judul AS event_judul,
-              e.tanggal AS event_tanggal, e.lokasi AS event_lokasi
+              e.tanggal AS event_tanggal, e.lokasi AS event_lokasi,
+              e.slug AS event_slug
        FROM e_certificates ec
        JOIN registrations r ON ec.reg_id = r.id
        JOIN events e ON r.event_id = e.id
-       WHERE r.user_id = $1
-       ORDER BY ec.tgl_terbit DESC`,
-      [req.user.id]
+       ORDER BY ec.tgl_terbit DESC`
     );
     res.json({ success: true, data: result.rows });
   } catch {

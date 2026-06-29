@@ -68,35 +68,36 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/event", label: "Event" },
     { href: "/galery", label: "Galeri" },
+    { href: "/berita", label: "Berita" },
     { href: "/aspirasi", label: "Aspirasi" },
     { href: "/sertifikat", label: "Sertifikat" },
     { href: "/devisi", label: "Devisi" },
-    { href: "/tentang", label: "Tentang" },
+    // { href: "/tentang", label: "Tentang" },
 
   ]
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-bg-dark border-b border-white/10">
+    <nav className="sticky top-0 z-50 w-full">
       {/* ─── Tier 1: Announcement Bar ─────────────────────────────── */}
-      <div className={`border-b border-white/[0.06] bg-bg-elevated transition-all duration-500 ease-in-out ${showAnnouncement ? "max-h-16 opacity-100" : "max-h-0 opacity-0 overflow-hidden py-0 border-transparent"
+      <div className={`bg-blue-900 transition-all duration-500 ease-in-out ${showAnnouncement ? "max-h-16 opacity-100" : "max-h-0 opacity-0 overflow-hidden py-0 border-transparent"
         }`}>
         <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-2 px-4 py-[10px]">
-          <svg className="h-[18px] w-[18px] shrink-0 text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="h-[18px] w-[18px] shrink-0 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z" />
             <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z" />
             <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
             <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
           </svg>
-          <span className="font-heading text-sm text-zinc-400">
-            Jangan lupa follow media sosial <span className="font-semibold text-zinc-200">HMTIKA</span> Karena banyak hal yang seru !
+          <span className="font-heading text-sm text-slate-300">
+            Jangan lupa follow media sosial <span className="font-semibold text-slate-200">HMTIKA</span> Karena banyak hal yang seru !
           </span>
-          <Link href="https://www.instagram.com/hmtika.sttb" className="group inline-flex items-center gap-1.5 font-heading text-sm font-semibold text-amber-gold hover:text-amber-gold-light transition-colors shrink-0 underline">
+          <Link href="https://www.instagram.com/hmtika.sttb" className="group inline-flex items-center gap-1.5 font-heading text-sm font-semibold text-slate-200 hover:text-slate-200/80 transition-colors shrink-0 underline">
             Instagram
             <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" />
           </Link>
           <button
             onClick={() => setShowAnnouncement(false)}
-            className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-zinc-500 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+            className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-slate-200 hover:text-slate-200/60 hover:bg-slate-200/10 transition-colors shrink-0"
             aria-label="Tutup pengumuman"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -107,14 +108,12 @@ export default function Navbar() {
       </div>
 
       {/* ─── Tier 2: Main Bar ─────────────────────────────────────── */}
-      <div className="border-b border-white/[0.06]">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-4 py-4">
+      <div className="bg-black/70 backdrop-blur-3xl">
+        <div className="mx-auto flex max-w-[1280px] items-cene_certificatester justify-between px-4 py-4">
           {/* Brand */}
           <Link href="/" className="flex shrink-0 items-center gap-2 group">
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-900 border border-white/10 shadow-lg shadow-black/50">
-              <svg className="h-[18px] w-[18px] text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
+            <div className="relative flex h-8 w-8 text-sm">
+              <img src="#" alt="logo_hmtika" />
               <div className="absolute inset-0 bg-amber-gold/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300" />
             </div>
             <span className="font-heading font-semibold tracking-tight text-white text-base">HMTIKA</span>
@@ -126,7 +125,7 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="font-heading flex items-center gap-1 text-sm font-semibold text-zinc-400 hover:text-amber-gold transition-colors duration-200"
+                className="font-heading flex items-center gap-1 text-sm font-semibold text-slate-200 hover:text-amber-gold transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -163,7 +162,7 @@ export default function Navbar() {
 
       {/* ─── Mobile Drawer ────────────────────────────────────────── */}
       {mobileOpen && (
-        <div className="w-full border-b border-white/10 bg-bg-dark/95 px-4 py-6 shadow-2xl backdrop-blur-2xl md:hidden">
+        <div className="w-full bg-bg-dark/95 px-4 py-6 shadow-2xl backdrop-blur-2xl md:hidden">
           <div className="flex flex-col gap-4 text-sm font-medium">
             {navLinks.map((link) => (
               <Link

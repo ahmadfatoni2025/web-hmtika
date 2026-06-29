@@ -3,6 +3,13 @@
 import { useState, useEffect } from "react"
 import { getNews, getNewsBySlug } from "@/lib/api"
 import type { NewsItem } from "@/lib/api"
+import {
+  Calendar,
+  ImageIcon,
+  ArrowRight,
+  Search,
+  X,
+} from "lucide-react"
 
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([])
@@ -14,7 +21,6 @@ export default function NewsPage() {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null)
   const [modalLoading, setModalLoading] = useState(false)
 
-  // Categories list
   const categories = ["Semua", "Kegiatan", "Pengumuman", "Akademik", "Umum"]
 
   useEffect(() => {
@@ -38,7 +44,6 @@ export default function NewsPage() {
     loadNews()
   }, [selectedCategory, page])
 
-  // Client side search filter
   const filteredNews = news.filter((item) =>
     item.judul.toLowerCase().includes(search.toLowerCase()) ||
     item.ringkasan.toLowerCase().includes(search.toLowerCase())
@@ -51,7 +56,6 @@ export default function NewsPage() {
       if (res && res.data) {
         setSelectedNews(res.data)
       } else {
-        // Fallback to current item if API details structure is nested differently
         const item = news.find(n => n.slug === slug)
         if (item) setSelectedNews(item)
       }
@@ -63,29 +67,38 @@ export default function NewsPage() {
     }
   }
 
-  return (
-    <main className="relative min-h-screen bg-[#050505] text-zinc-100 pb-24 overflow-hidden">
-      {/* Background Decorative Gradients */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-amber-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-amber-500/5 blur-[150px] pointer-events-none" />
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return ""
+    return new Date(dateStr).toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
+  }
 
-      <div className="relative z-10 mx-auto max-w-5xl px-6 pt-12">
-        {/* Header */}
-        <div className="space-y-4 mb-16 text-center md:text-left">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1 text-[10px] uppercase font-bold tracking-widest text-zinc-400">
-            ◎ Newsroom HMTIKA
+  return (
+    <main className="relative min-h-screen bg-bg-dark text-zinc-100 pb-24 overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-amber-gold/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-amber-gold/5 blur-[150px] pointer-events-none" />
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 pt-20">
+        {/* ─── Header ─────────────────────────────────────────── */}
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-gold/20 bg-amber-gold/10 px-4 py-1 text-xs font-semibold text-amber-gold mb-5">
+            Newsroom HMTIKA
           </div>
-          <h1 className="text-4xl sm:text-6xl font-normal leading-[1.1] tracking-tight text-white">
-            Pusat Informasi & <span className="font-display italic font-light text-zinc-300">Kabar Terbaru</span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight mb-4">
+            Pusat Informasi & Kabar Terbaru
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl leading-relaxed">
-            Dapatkan berita resmi, pengumuman akademik, dan rangkuman kegiatan dari Himpunan Mahasiswa Teknik Informatika secara transparan dan berkala.
+          <p className="mx-auto max-w-2xl text-zinc-400 text-base sm:text-lg leading-relaxed">
+            Dapatkan berita resmi, pengumuman akademik, dan rangkuman kegiatan dari
+            Himpunan Mahasiswa Teknik Informatika secara transparan dan berkala.
           </p>
         </div>
 
-        {/* Filters and Search Bar */}
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-10 pb-6 border-b border-white/[0.06]">
-          {/* Categories */}
+        {/* ─── Filters ────────────────────────────────────────── */}
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-12 pb-6 border-b border-white/[0.06]">
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
             {categories.map((cat) => (
               <button
@@ -94,52 +107,53 @@ export default function NewsPage() {
                   setSelectedCategory(cat)
                   setPage(1)
                 }}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide border transition-all duration-200 ${selectedCategory === cat
-                    ? "bg-amber-500/10 border-amber-500/30 text-amber-400 shadow-[0_0_15px_rgba(212,168,83,0.15)]"
-                    : "bg-white/[0.02] border-white/[0.06] text-zinc-400 hover:text-white hover:border-white/20"
-                  }`}
+                className={`inline-flex items-center whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
+                  selectedCategory === cat
+                    ? "bg-amber-gold text-black shadow-md shadow-amber-gold/20"
+                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                }`}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          {/* Search Input */}
-          <div className="relative w-full md:w-80">
-            <span className="absolute inset-y-0 left-3.5 flex items-center text-zinc-500 text-xs pointer-events-none">🔍</span>
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
             <input
               type="text"
               placeholder="Cari berita..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-full bg-white/[0.02] border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500/30 focus:bg-white/[0.04] transition-all"
+              className="w-full pl-10 pr-4 py-2 text-sm rounded-full bg-white/[0.02] border border-white/[0.08] text-white placeholder-zinc-500 focus:outline-none focus:border-amber-gold/30 focus:bg-white/[0.04] transition-all"
             />
           </div>
         </div>
 
-        {/* News Grid */}
+        {/* ─── News Grid ──────────────────────────────────────── */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-[380px] rounded-2xl bg-white/[0.01] border border-white/[0.05] animate-pulse" />
+              <div key={i} className="h-[420px] rounded-2xl glass-card-glowing animate-pulse" />
             ))}
           </div>
         ) : filteredNews.length === 0 ? (
           <div className="text-center py-20 glass-card-glowing rounded-2xl border border-white/5">
-            <span className="text-4xl">📭</span>
             <p className="mt-4 text-sm font-bold text-zinc-300">Tidak ada berita ditemukan</p>
             <p className="text-xs text-zinc-500 mt-1">Coba gunakan kata kunci lain atau pilih kategori berbeda.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredNews.map((item) => (
               <article
                 key={item.id}
-                onClick={() => openNewsDetail(item.slug)}
-                className="group cursor-pointer glass-card-glowing border border-white/5 rounded-2xl overflow-hidden flex flex-col justify-between min-h-[380px]"
+                className="group glass-card-glowing rounded-2xl overflow-hidden flex flex-col transition-all duration-300"
               >
-                {/* News Image/Gradient Fallback */}
-                <div className="relative h-44 w-full bg-zinc-950 overflow-hidden border-b border-white/[0.05]">
+                {/* Image placeholder */}
+                <div
+                  onClick={() => openNewsDetail(item.slug)}
+                  className="relative h-48 w-full bg-gradient-to-br from-amber-gold/10 via-zinc-900 to-zinc-950 flex items-center justify-center cursor-pointer overflow-hidden"
+                >
                   {item.thumbnail ? (
                     <img
                       src={item.thumbnail}
@@ -147,60 +161,68 @@ export default function NewsPage() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-amber-500/10 via-zinc-900 to-zinc-950 flex items-center justify-center relative">
-                      <span className="text-3xl opacity-20">📰</span>
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    </div>
+                    <ImageIcon className="h-12 w-12 text-zinc-600/50" />
                   )}
-                  {/* Category Tag */}
-                  <span className="absolute top-4 left-4 inline-flex items-center rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[9px] font-bold text-amber-400 border border-white/10 uppercase tracking-widest">
+                  <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-black/50 backdrop-blur-md px-2.5 py-0.5 text-[9px] font-bold text-amber-gold border border-white/10 uppercase tracking-widest">
                     {item.kategori}
                   </span>
                 </div>
 
-                {/* News Info */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-mono text-zinc-500">
-                      {item.tglPublish
-                        ? new Date(item.tglPublish).toLocaleDateString("id-ID", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                        : "Draft"}
-                    </p>
-                    <h2 className="text-base font-bold text-white leading-snug group-hover:text-amber-400 transition-colors line-clamp-2">
-                      {item.judul}
-                    </h2>
-                    <p className="text-xs text-zinc-400 line-clamp-3 leading-relaxed">
-                      {item.ringkasan}
-                    </p>
-                  </div>
+                {/* Content */}
+                <div className="flex flex-col flex-1 p-5 gap-3">
+                  {/* Headline */}
+                  <h2
+                    onClick={() => openNewsDetail(item.slug)}
+                    className="text-base font-bold text-white leading-snug group-hover:text-amber-gold transition-colors line-clamp-2 cursor-pointer"
+                  >
+                    {item.judul}
+                  </h2>
 
-                  {/* Author / Read More link */}
-                  <div className="pt-4 border-t border-white/[0.04] flex items-center justify-between text-[11px] text-zinc-500">
-                    <div className="flex items-center gap-2">
+                  {/* Author row */}
+                  <div className="flex items-center gap-2 text-xs text-zinc-500">
+                    <div className="flex items-center gap-1.5">
                       {item.author?.foto ? (
-                        <img src={item.author.foto} alt={item.author.nama} className="w-5 h-5 rounded-full border border-white/10" />
+                        <img
+                          src={item.author.foto}
+                          alt={item.author.nama}
+                          className="w-5 h-5 rounded-full border border-white/10 object-cover"
+                        />
                       ) : (
                         <span className="w-5 h-5 rounded-full bg-zinc-800 flex items-center justify-center border border-white/10 text-[9px]">👤</span>
                       )}
-                      <span className="font-semibold text-zinc-400 line-clamp-1">{item.author?.nama || "Admin HMTIKA"}</span>
+                      <span className="font-semibold text-zinc-400 line-clamp-1">
+                        {item.author?.nama || "Admin HMTIKA"}
+                      </span>
                     </div>
-                    <span className="group-hover:text-white transition-colors flex items-center gap-1">
-                      Baca Selengkapnya <span className="translate-x-0 group-hover:translate-x-1 transition-transform">→</span>
-                    </span>
+                    <span className="text-zinc-600">|</span>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3.5 w-3.5" />
+                      <span>{formatDate(item.tglPublish) || "Draft"}</span>
+                    </div>
                   </div>
+
+                  {/* Excerpt */}
+                  <p className="text-xs text-zinc-400 leading-relaxed line-clamp-3 flex-1">
+                    {item.ringkasan}
+                  </p>
+
+                  {/* Read more */}
+                  <button
+                    onClick={() => openNewsDetail(item.slug)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-gold hover:text-amber-gold-light transition-colors mt-auto pt-2 border-t border-white/[0.04]"
+                  >
+                    <ArrowRight className="h-3.5 w-3.5" />
+                    Baca Selengkapnya
+                  </button>
                 </div>
               </article>
             ))}
           </div>
         )}
 
-        {/* Pagination */}
+        {/* ─── Pagination ─────────────────────────────────────── */}
         {totalPage > 1 && (
-          <div className="flex items-center justify-center gap-4 mt-12">
+          <div className="flex items-center justify-center gap-4 mt-14">
             <button
               onClick={() => setPage((p) => Math.max(p - 1, 1))}
               disabled={page === 1}
@@ -220,57 +242,49 @@ export default function NewsPage() {
         )}
       </div>
 
-      {/* Details Slide-over Modal */}
+      {/* ─── Detail Modal ─────────────────────────────────────── */}
       {selectedNews && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
           <div
-            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto glass-card-glowing border border-white/10 rounded-2xl shadow-2xl p-6 md:p-8"
+            className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto glass-premium rounded-2xl shadow-2xl p-6 md:p-8"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={() => setSelectedNews(null)}
               className="absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-zinc-400 hover:text-white transition-all"
             >
-              ✕
+              <X className="h-4 w-4" />
             </button>
 
-            {/* Modal Header */}
             <div className="space-y-3 mb-6">
-              <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[9px] font-bold text-amber-400 border border-amber-500/20 uppercase tracking-widest">
+              <span className="inline-flex items-center rounded-full bg-amber-gold/10 px-2.5 py-0.5 text-[9px] font-bold text-amber-gold border border-amber-gold/20 uppercase tracking-widest">
                 {selectedNews.kategori}
               </span>
               <h2 className="text-2xl font-bold text-white tracking-tight leading-snug">
                 {selectedNews.judul}
               </h2>
               <div className="flex items-center gap-4 text-xs text-zinc-500">
-                <span>
-                  📅 {selectedNews.tglPublish
-                    ? new Date(selectedNews.tglPublish).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                    : "Draft"}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" />
+                  <span>{formatDate(selectedNews.tglPublish) || "Draft"}</span>
+                </div>
                 <span>•</span>
-                <span>✍️ {selectedNews.author?.nama || "Admin HMTIKA"}</span>
+                <span>
+                  {selectedNews.author?.nama || "Admin HMTIKA"}
+                </span>
               </div>
             </div>
 
-            {/* Thumbnail */}
             {selectedNews.thumbnail && (
               <div className="w-full h-64 rounded-xl overflow-hidden mb-6 border border-white/5">
                 <img src={selectedNews.thumbnail} alt={selectedNews.judul} className="w-full h-full object-cover" />
               </div>
             )}
 
-            {/* Content Body */}
             <div className="text-zinc-300 text-sm leading-relaxed space-y-4 whitespace-pre-line">
               {selectedNews.konten || selectedNews.ringkasan}
             </div>
 
-            {/* Modal Footer */}
             <div className="mt-8 pt-4 border-t border-white/[0.06] flex justify-end">
               <button
                 onClick={() => setSelectedNews(null)}
@@ -278,6 +292,18 @@ export default function NewsPage() {
               >
                 Tutup
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal loading overlay */}
+      {modalLoading && selectedNews && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <div className="glass-premium rounded-2xl p-8">
+            <div className="flex items-center gap-3 text-sm text-zinc-400">
+              <div className="h-5 w-5 border-2 border-amber-gold/30 border-t-amber-gold rounded-full animate-spin" />
+              Memuat...
             </div>
           </div>
         </div>
