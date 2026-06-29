@@ -33,7 +33,7 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center gap-3">
               {/* Ganti dengan logo jika ada */}
               <div className="flex h-10 w-10">
-                <img src="#" alt="Logo_hmtika" />
+                <img src="logo/logo.webp" alt="Logo_hmtika" />
               </div>
 
               <div>
