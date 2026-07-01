@@ -113,7 +113,7 @@ export default function Navbar() {
           {/* Brand */}
           <Link href="/" className="flex shrink-0 items-center gap-2 group">
             <div className="relative flex h-8 w-8 text-sm">
-              <img src="#" alt="logo_hmtika" />
+              <img src="/logo/logo.webp" alt="logo_hmtika" className="w-full h-full object-cover object-center" />
               <div className="absolute inset-0 bg-amber-gold/10 opacity-0 group-hover:opacity-100 rounded-lg transition-opacity duration-300" />
             </div>
             <span className="font-heading font-semibold tracking-tight text-white text-base">HMTIKA</span>
@@ -125,7 +125,7 @@ export default function Navbar() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="font-heading flex items-center gap-1 text-sm font-semibold text-slate-200 hover:text-amber-gold transition-colors duration-200"
+                className="font-heading flex items-center gap-1 text-sm font-semibold text-slate-200 hover:text-amber-gold hover:underline transition-colors duration-200"
               >
                 {link.label}
               </Link>

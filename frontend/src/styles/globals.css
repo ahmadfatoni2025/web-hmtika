@@ -1,11 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-google: #ea4335;
+  --color-google-light: #ea4335;
+  --color-google-dark: #ea4335;
+  --color-microsoft: #434190;
+  --color-microsoft-light: #434190;
+  --color-microsoft-dark: #434190;
+  --color-github: #211f1f;
+  --color-github-light: #211f1f;
+  --color-github-dark: #211f1f;
+  --color-dicoding: #211f1f;
+  --color-dicoding-light: #211f1f;
+  --color-dicoding-dark: #211f1f;
+
+}
+
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: "Playfair Display", serif;
-  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Google Sans", sans-serif;
+  --font-mono: "Google Sans", sans-serif;
+  --font-display: "Google Sans", sans-serif;
+  --font-heading: "Google Sans", sans-serif;
 
   --color-bg-dark: #050505;
   --color-bg-elevated: #0a0a0a;
@@ -14,10 +30,33 @@
   --color-amber-gold: #d4a853;
   --color-amber-gold-light: #e8c46e;
   --color-amber-gold-dark: #b08a3a;
+
+  --background: #050505;
+  --foreground: #f3f4f6;
+  --card: #0f0f0f;
+  --card-foreground: #f3f4f6;
+  --popover: #0f0f0f;
+  --popover-foreground: #f3f4f6;
+  --primary: #d4a853;
+  --primary-foreground: #050505;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #f3f4f6;
+  --muted: #1f1f1f;
+  --muted-foreground: #a1a1aa;
+  --accent: #1f1f1f;
+  --accent-foreground: #f3f4f6;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f3f4f6;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4a853;
+  --radius: 0.5rem;
 }
 
 body {
-  font-family: var(--font-heading);
+  font-family: "Google Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "GRAD" 0;
   background-color: #050505;
   color: #f3f4f6;
 }

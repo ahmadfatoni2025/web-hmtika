@@ -8,6 +8,9 @@ import HeroSection from "@/components/home/HeroSection"
 import FloatingData from "@/components/home/FloatingData"
 import Collaborators from "@/components/home/Collaborators"
 import Feature from "@/components/home/Feature"
+import ExtrasFeature from "@/components/home/ExtrasFeature"
+import BentoDocs from "@/components/home/BentoDocs"
+import FAQ from "@/components/home/FAQ"
 
 export default function Home() {
   // API states
@@ -107,65 +110,13 @@ export default function Home() {
       <Feature />
 
       {/* ── EXTRAS / BENCHMARKS SECTION ── */}
-      <section id="approach" className="w-full py-24 px-6 relative border-t border-white/[0.03]">
+      <ExtrasFeature />
 
-        <div className="mx-auto max-w-5xl flex flex-col items-center gap-16">
+      {/* Bento card */}
+      <BentoDocs />
 
-          {/* Section Header */}
-          <div className="text-center space-y-4 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] px-3.5 py-1 text-[10px] uppercase font-bold tracking-widest text-zinc-400">
-              ◎ Benchmarks
-            </div>
-            <h2 className="text-3xl sm:text-5xl md:text-6xl font-normal leading-[1.12] tracking-tight text-white">
-              Semua Layanan dalam <span className="font-display italic font-light text-zinc-100">Satu Platform</span>
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto leading-relaxed">
-              Website ini dioptimalkan khusus untuk memberikan performa terbaik dalam pemenuhan administrasi kemahasiswaan.
-            </p>
-          </div>
-
-          {/* 3 Columns details */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-
-            {/* Column 1 */}
-            <div className="glass-card-glowing border border-white/5 rounded-2xl p-6 space-y-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-900 border border-white/10 text-base">⚡</span>
-              <div className="space-y-2">
-                <h3 className="text-sm font-bold text-white">Ringan & Mobile-First</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Dioptimalkan untuk browser ponsel dengan ukuran halaman minimalis untuk loading super cepat di bawah 2 detik.
-                </p>
-              </div>
-            </div>
-
-            {/* Column 2 */}
-            <div className="glass-card-glowing border border-white/5 rounded-2xl p-6 space-y-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-900 border border-white/10 text-base">🎓</span>
-              <div className="space-y-2">
-                <h3 className="text-sm font-bold text-white">Klaim Sertifikat Digital</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Peserta kegiatan yang hadir dapat mengunduh E-Sertifikat resmi berformat PDF secara langsung dari dashboard akun.
-                </p>
-              </div>
-            </div>
-
-            {/* Column 3 */}
-            <div className="glass-card-glowing border border-white/5 rounded-2xl p-6 space-y-4">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-900 border border-white/10 text-base">🔔</span>
-              <div className="space-y-2">
-                <h3 className="text-sm font-bold text-white">Notifikasi Real-time</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  Mendapatkan pembaruan status tindak lanjut aspirasi secara instan dari pengurus/admin HMTIKA.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
+      {/* FAQ */}
+      <FAQ />
     </main>
   )
 }

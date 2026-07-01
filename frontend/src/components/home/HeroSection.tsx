@@ -1,13 +1,16 @@
 import Link from "next/link";
+import ShinyText from "./ShinyText";
 
 export default function HeroSection() {
     return (
         <>
             {/* Hero Typography Heading */}
             <div className="space-y-4 mt-18 text-center max-w-3xl">
-                <h1 className="text-4xl sm:text-6xl md:text-[76px] font-normal leading-[1.08] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
-                    <span className="font-display block italic font-light tracking-wide text-zinc-100">Jangan lupa</span>
-                    <span className="font-sans font-black uppercase bg-gradient-to-b from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">Titik Koma</span>
+                <div className="flex flex-row items-center justify-center gap-4">
+                    <input type="text" className="p-3 w-96 h-10 focus:outline-slate-100/5 shadow-amber-200/40 rounded-full border border-zinc-400/30 bg-black/20 backdrop-blur-sm text-white placeholder:text-white/50" placeholder="Cari yang kamu inginkan di sini..." />
+                </div>
+                <h1 className="text-2xl sm:text-3xl md:text-6xl font-medium leading-[1.08] tracking-tight text-zinc-100 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+                    Jangan lupa Titik Koma.
                 </h1>
                 <p className="text-xs sm:text-sm md:text-base text-zinc-200 max-w-xl mx-auto leading-relaxed font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
                     Himpunan Mahasiswa Teknik Informatika (HMTIKA) STIMIK Tunas Bangsa menjadi wadah sinergi, inovasi, dan pengembangan potensi akademis maupun praktis.
