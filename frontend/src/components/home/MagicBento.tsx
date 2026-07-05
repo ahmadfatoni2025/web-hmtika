@@ -69,7 +69,7 @@ const defaultCards: BentoCard[] = [
   },
 ]
 
-function ParticleCard({
+export function ParticleCard({
   children,
   className = "",
   disableAnimations = false,
