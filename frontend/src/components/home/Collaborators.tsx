@@ -1,27 +1,40 @@
-export default function Collaborators() {
-  const partners = [
-    { name: "Google Developer Groups", icon: "GDG" },
-    { name: "GitHub Campus", icon: "GitHub" },
-    { name: "Dicoding Academy", icon: "Dicoding" },
-    { name: "Microsoft Learn", icon: "Microsoft" },
-    { name: "STIMIK Tunas Bangsa", icon: "STIMIK" }
-  ]
+import LogoLoop from './LogoLoop';
+import { FaGoogle, FaMicrosoft, FaGraduationCap } from 'react-icons/fa';
+import { SiGithub } from 'react-icons/si';
+import { MdCode } from 'react-icons/md';
 
+const partners = [
+  { node: <FaGoogle />, title: "Google Developer Groups", href: "https://developers.google.com/community/gdg" },
+  { node: <SiGithub />, title: "GitHub Campus", href: "https://education.github.com" },
+  { node: <MdCode />, title: "Dicoding Academy", href: "https://www.dicoding.com" },
+  { node: <FaMicrosoft />, title: "Microsoft Learn", href: "https://learn.microsoft.com" },
+  { node: <FaGraduationCap />, title: "STIMIK Tunas Bangsa", href: "https://stimik.ac.id" },
+];
+
+export default function Collaborators() {
   return (
-    <section className="w-full px-6 relative overflow-hidden">
-      {/* ── TRUSTED BY / PARTNERS SECTION ── */}
-      <div className="w-full py-10 overflow-hidden border-t border-b border-white/[0.04]">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col items-center gap-6">
+    <section className="w-full relative overflow-hidden">
+      <div className="relative w-full py-10 border-t border-b border-white/[0.04]">
+        <div className="mx-auto w-auto max-w-7xl px-6 flex flex-col items-center gap-6 relative overflow-hidden">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-500 text-center">
             Kolaborasi & Kemitraan Strategis
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-6 opacity-35 hover:opacity-70 transition-opacity duration-300">
-            <span className="text-base font-semibold tracking-tight text-white">Google Developer Groups</span>
-            <span className="text-base font-serif font-bold italic tracking-wide text-white">GitHub Campus</span>
-            <span className="text-base font-sans font-black text-white">Dicoding Academy</span>
-            <span className="text-base font-sans font-light tracking-widest uppercase text-white">Microsoft Learn</span>
-            <span className="text-base font-serif font-semibold text-white">STIMIK Tunas Bangsa</span>
+          <div className="w-full">
+            <LogoLoop
+              logos={partners}
+              speed={40}
+              direction="left"
+              logoHeight={32}
+              gap={64}
+              hoverSpeed={0}
+              scaleOnHover
+              fadeOut
+              fadeOutColor="#0b0b0b"
+              ariaLabel="Partner logos"
+            />
           </div>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0b0b0b] to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0b0b0b] to-transparent z-10" />
         </div>
       </div>
     </section>
