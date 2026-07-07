@@ -15,7 +15,7 @@
   overflow: hidden;
 }
 
-.masonry-item > .masonry-img {
+.masonry-item>.masonry-img {
   position: relative;
   background-size: cover;
   background-position: center center;

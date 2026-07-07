@@ -39,14 +39,19 @@ export default function GaleryPage() {
   }))
 
   return (
-    <div className="pt-24 pb-16 max-w-7xl mx-auto px-4">
-      <h1 className="text-center text-2xl py-6 font-black text-white">
+    <main className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 className="text-center text-2xl sm:text-3xl py-6 font-black text-white">
         Dokumentasi Kegiatan HMTIKA
       </h1>
       {loading ? (
-        <p className="text-center text-zinc-400">Memuat gambar...</p>
+        <div className="flex flex-col items-center justify-center py-24 gap-4">
+          <div className="size-10 rounded-full border-2 border-zinc-600 border-t-white animate-spin" />
+          <p className="text-zinc-400 text-sm">Memuat gambar...</p>
+        </div>
       ) : masonryItems.length === 0 ? (
-        <p className="text-center text-zinc-400">Belum ada gambar.</p>
+        <div className="flex flex-col items-center justify-center py-24 gap-2">
+          <p className="text-zinc-400 text-sm">Belum ada gambar.</p>
+        </div>
       ) : (
         <Masonry
           items={masonryItems}
@@ -59,6 +64,6 @@ export default function GaleryPage() {
           blurToFocus={true}
         />
       )}
-    </div>
+    </main>
   )
 }

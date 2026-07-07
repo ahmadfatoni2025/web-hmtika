@@ -17,7 +17,7 @@ Fitur-fitur ini wajib ada di rilis pertama karena langsung menyelesaikan masalah
 * *Alasan:* Mendapat skor persetujuan tertinggi di survei. Mahasiswa sangat vokal ingin menyampaikan saran/keluhan (akademik, fasilitas, kegiatan) tetapi *takut identitasnya ketahuan*.
 * *Detail:* Sistem pengiriman pesan di mana data akun pengirim benar-benar dilepas/dihapus oleh sistem saat disimpan ke database jika opsi "Anonim" diaktifkan.
 
-
+    
 3. **Kalender Kegiatan & Pendaftaran Event**
 * *Alasan:* Responden ingin tahu agenda apa saja yang akan datang tanpa harus mencari-cari pamflet lama di media sosial.
 * *Detail:* Daftar *timeline* acara harian/bulanan beserta tombol pendaftaran langsung di dalam web.
