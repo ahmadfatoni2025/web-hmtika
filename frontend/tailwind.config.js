@@ -9,8 +9,8 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Inter", ...defaultTheme.fontFamily.sans],
-                display: ["Space Grotesk", ...defaultTheme.fontFamily.sans],
+                sans: ["Google Sans", ...defaultTheme.fontFamily.sans],
+                display: ["Google Sans", ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 zinc: {

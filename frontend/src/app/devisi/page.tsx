@@ -15,6 +15,7 @@ import {
   GraduationCap,
   Sparkles,
 } from "lucide-react"
+import { Skeleton } from "@/components/ui/Skeleton"
 
 const divisionIcons: Record<string, React.ElementType> = {
   RISTEK: Zap,
@@ -28,11 +29,14 @@ const divisionIcons: Record<string, React.ElementType> = {
 export default function DevisiPage() {
   const [members, setMembers] = useState<MemberItem[]>([])
   const [activeFilter, setActiveFilter] = useState("All")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    setLoading(true)
     getMembers()
       .then((res) => setMembers(res.data))
       .catch(() => { })
+      .finally(() => setLoading(false))
   }, [])
 
   const divisions = useMemo(() => {
@@ -85,23 +89,37 @@ export default function DevisiPage() {
       </div>
 
       {/* ─── Member Grid ────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        {filtered.map((member) => (
-          <div key={member.id} className="group relative overflow-hidden rounded-2xl bg-zinc-900">
-            <div className="aspect-[3/4] w-full overflow-hidden">
-              <img
-                src={member.photo_url}
-                alt={member.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="group relative overflow-hidden rounded-2xl bg-zinc-900 border border-white/5 p-4 flex flex-col gap-4">
+              <Skeleton className="aspect-[3/4] w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
             </div>
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 pt-12">
-              <h3 className="text-base font-semibold text-white">{member.name}</h3>
-              <p className="text-sm text-zinc-400">{member.description}</p>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {filtered.map((member) => (
+            <div key={member.id} className="group relative overflow-hidden rounded-2xl bg-zinc-900">
+              <div className="aspect-[3/4] w-full overflow-hidden">
+                <img
+                  src={member.photo_url}
+                  alt={member.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 pt-12">
+                <h3 className="text-base font-semibold text-white">{member.name}</h3>
+                <p className="text-sm text-zinc-400">{member.description}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* ─── CTA Footer Bar ─────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-5">

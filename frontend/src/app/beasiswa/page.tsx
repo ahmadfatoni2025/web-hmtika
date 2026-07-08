@@ -1,8 +1,17 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { ExternalLink } from "lucide-react"
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton"
 
 export default function BeasiswaPage() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600)
+    return () => clearTimeout(timer)
+  }, [])
+
   const scholarships = [
     {
       title: "Beasiswa Prestasi Akademik",
@@ -116,58 +125,100 @@ export default function BeasiswaPage() {
           <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <span>🎓</span> Beasiswa
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {scholarships.map((item, i) => (
-              <div
-                key={i}
-                className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3 hover:border-amber-gold/20 transition-all duration-300"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-sm font-bold text-white">{item.title}</h3>
-                    <p className="text-[11px] text-amber-gold font-semibold mt-0.5">{item.provider}</p>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-5 w-3/4" />
+                      <Skeleton className="h-4.5 w-1/3" />
+                    </div>
+                    <Skeleton className="h-5 w-14 rounded-full" />
                   </div>
-                  <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold border uppercase tracking-widest ${typeColors[item.type]}`}>
-                    {item.type}
-                  </span>
+                  <SkeletonText lines={3} />
+                  <div className="flex justify-between pt-2 border-t border-white/[0.04]">
+                    <Skeleton className="h-3.5 w-24" />
+                    <Skeleton className="h-4 w-12" />
+                  </div>
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed flex-1">{item.desc}</p>
-                <div className="flex items-center justify-between pt-2 border-t border-white/[0.04] text-[10px]">
-                  <span className="text-zinc-500">Deadline: <span className="text-zinc-300 font-semibold">{item.deadline}</span></span>
-                  <span className="font-bold text-amber-gold">{item.amount}</span>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {scholarships.map((item, i) => (
+                <div
+                  key={i}
+                  className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3 hover:border-amber-gold/20 transition-all duration-300"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                      <p className="text-[11px] text-amber-gold font-semibold mt-0.5">{item.provider}</p>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center rounded-full px-2 py-0.5 text-[9px] font-bold border uppercase tracking-widest ${typeColors[item.type]}`}>
+                      {item.type}
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed flex-1">{item.desc}</p>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.04] text-[10px]">
+                    <span className="text-zinc-500">Deadline: <span className="text-zinc-300 font-semibold">{item.deadline}</span></span>
+                    <span className="font-bold text-amber-gold">{item.amount}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div>
           <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
             <span>💼</span> Lowongan Karier
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {careers.map((item, i) => (
-              <div
-                key={i}
-                className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3 hover:border-amber-gold/20 transition-all duration-300"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-sm font-bold text-white">{item.title}</h3>
-                    <p className="text-[11px] text-amber-gold font-semibold mt-0.5">{item.company}</p>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3">
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-5 w-3/4" />
+                      <Skeleton className="h-4.5 w-1/3" />
+                    </div>
+                    <Skeleton className="h-5 w-5 rounded-md" />
                   </div>
-                  <ExternalLink className="h-4 w-4 text-zinc-500 shrink-0" />
+                  <SkeletonText lines={2} />
+                  <div className="flex justify-between pt-2 border-t border-white/[0.04]">
+                    <Skeleton className="h-3.5 w-20" />
+                    <Skeleton className="h-4.5 w-16" />
+                  </div>
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed flex-1">{item.desc}</p>
-                <div className="flex items-center justify-between pt-2 border-t border-white/[0.04] text-[10px]">
-                  <span className="text-zinc-500 flex items-center gap-1">
-                    <span>📍</span> {item.location}
-                  </span>
-                  <span className="font-bold text-emerald-400">{item.salary}</span>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {careers.map((item, i) => (
+                <div
+                  key={i}
+                  className="glass-card-glowing border border-white/5 rounded-2xl p-5 flex flex-col gap-3 hover:border-amber-gold/20 transition-all duration-300"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-bold text-white">{item.title}</h3>
+                      <p className="text-[11px] text-amber-gold font-semibold mt-0.5">{item.company}</p>
+                    </div>
+                    <ExternalLink className="h-4 w-4 text-zinc-500 shrink-0" />
+                  </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed flex-1">{item.desc}</p>
+                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.04] text-[10px]">
+                    <span className="text-zinc-500 flex items-center gap-1">
+                      <span>📍</span> {item.location}
+                    </span>
+                    <span className="font-bold text-emerald-400">{item.salary}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>

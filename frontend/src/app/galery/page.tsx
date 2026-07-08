@@ -5,6 +5,7 @@ import { getImages } from "@/lib/api/images"
 import type { ImageItem } from "@/lib/api/images"
 import Masonry from "@/components/ui/Masonry"
 import type { MasonryItem } from "@/components/ui/Masonry"
+import { Skeleton } from "@/components/ui/Skeleton"
 
 function assignHeight(id: number, index: number): number {
   const heights = [350, 500, 280, 420, 600, 320, 480, 380, 550, 300]
@@ -44,9 +45,19 @@ export default function GaleryPage() {
         Dokumentasi Kegiatan HMTIKA
       </h1>
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <div className="size-10 rounded-full border-2 border-zinc-600 border-t-white animate-spin" />
-          <p className="text-zinc-400 text-sm">Memuat gambar...</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-4 space-y-4">
+              <Skeleton
+                className="w-full rounded-xl"
+                style={{ height: i % 3 === 0 ? "350px" : i % 3 === 1 ? "280px" : "420px" }}
+              />
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-2/3" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : masonryItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-2">

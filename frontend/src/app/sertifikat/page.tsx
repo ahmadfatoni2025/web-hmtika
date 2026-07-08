@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { getMyCertificates } from "@/lib/api/certificates"
 import type { CertificateItem } from "@/lib/api/certificates"
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton"
 
 type PageStatus = "loading" | "error" | "empty" | "success"
 
@@ -67,8 +68,24 @@ export default function SertifikatPage() {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="h-52 rounded-2xl bg-white/[0.01] border border-white/[0.05] animate-pulse"
-              />
+                className="glass-card-glowing border border-white/5 rounded-2xl p-6 flex flex-col gap-4"
+              >
+                <div className="flex justify-between items-center">
+                  <Skeleton className="w-10 h-10 rounded-xl" />
+                  <Skeleton className="h-4.5 w-16" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                </div>
+                <div className="pt-3 mt-auto border-t border-white/[0.06] space-y-2">
+                  <div className="flex justify-between">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-3 w-10" />
+                  </div>
+                  <Skeleton className="h-8 w-full rounded-xl" />
+                </div>
+              </div>
             ))}
           </div>
         ) : status === "error" ? (

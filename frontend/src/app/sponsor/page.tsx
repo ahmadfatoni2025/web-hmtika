@@ -1,6 +1,16 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { Skeleton } from "@/components/ui/Skeleton"
+
 export default function SponsorPage() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   const sponsors = [
     { name: "PT Teknologi Nusantara", tier: "Platinum", desc: "Perusahaan teknologi terkemuka di Indonesia yang bergerak di bidang pengembangan perangkat lunak dan infrastruktur digital." },
     { name: "Inovasi Digital Corp", tier: "Gold", desc: "Startup teknologi yang fokus pada inovasi produk digital dan solusi cloud computing." },
@@ -38,25 +48,39 @@ export default function SponsorPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {sponsors.map((sponsor, i) => (
-            <div
-              key={i}
-              className="glass-card-glowing border border-white/5 rounded-2xl p-6 flex flex-col gap-4 hover:border-amber-gold/20 transition-all duration-300"
-            >
-              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-amber-gold/20 to-zinc-900 flex items-center justify-center mx-auto border border-white/5">
-                <span className="text-2xl font-black text-amber-gold/60">{sponsor.name[0]}</span>
-              </div>
-              <div className="text-center space-y-2">
-                <div className="flex items-center justify-center gap-2">
-                  <h3 className="text-sm font-bold text-white">{sponsor.name}</h3>
+          {loading ? (
+            Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-6 flex flex-col gap-4 items-center">
+                <Skeleton className="h-20 w-20 rounded-full" />
+                <Skeleton className="h-5 w-3/4" />
+                <Skeleton className="h-4 w-1/3 rounded-full" />
+                <div className="space-y-1.5 w-full">
+                  <Skeleton className="h-3 w-full" />
+                  <Skeleton className="h-3 w-5/6" />
                 </div>
-                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold border uppercase tracking-widest ${tierColors[sponsor.tier]}`}>
-                  {sponsor.tier}
-                </span>
-                <p className="text-xs text-zinc-400 leading-relaxed">{sponsor.desc}</p>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            sponsors.map((sponsor, i) => (
+              <div
+                key={i}
+                className="glass-card-glowing border border-white/5 rounded-2xl p-6 flex flex-col gap-4 hover:border-amber-gold/20 transition-all duration-300"
+              >
+                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-amber-gold/20 to-zinc-900 flex items-center justify-center mx-auto border border-white/5">
+                  <span className="text-2xl font-black text-amber-gold/60">{sponsor.name[0]}</span>
+                </div>
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <h3 className="text-sm font-bold text-white">{sponsor.name}</h3>
+                  </div>
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold border uppercase tracking-widest ${tierColors[sponsor.tier]}`}>
+                    {sponsor.tier}
+                  </span>
+                  <p className="text-xs text-zinc-400 leading-relaxed">{sponsor.desc}</p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         <div className="mt-16 text-center glass-card-glowing border border-white/5 rounded-2xl p-8 max-w-2xl mx-auto">

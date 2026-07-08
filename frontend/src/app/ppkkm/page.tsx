@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { submitAspiration, getAspirations } from "@/lib/api"
 import type { AspirationItem } from "@/lib/api"
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton"
 
 export default function PpkkmPage() {
   const [kategori, setKategori] = useState("Fasilitas")
@@ -151,7 +152,17 @@ export default function PpkkmPage() {
               {loadingList ? (
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-24 rounded-2xl bg-white/[0.01] border border-white/[0.05] animate-pulse" />
+                    <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-4 space-y-3">
+                      <div className="flex justify-between items-center">
+                        <Skeleton className="h-5 w-16" />
+                        <Skeleton className="h-5 w-14 rounded-full" />
+                      </div>
+                      <SkeletonText lines={2} />
+                      <div className="flex justify-between pt-2 border-t border-white/[0.04]">
+                        <Skeleton className="h-3 w-20" />
+                        <Skeleton className="h-3.5 w-8" />
+                      </div>
+                    </div>
                   ))}
                 </div>
               ) : aspirations.length === 0 ? (

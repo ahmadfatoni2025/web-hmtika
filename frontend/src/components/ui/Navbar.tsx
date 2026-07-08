@@ -1,89 +1,131 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import CardNav from "./CardNav"
-import type { CardNavItem } from "./CardNav"
+import { X, ArrowUpRight } from "lucide-react"
+import { MdMenuOpen } from "react-icons/md"
 
-function ArrowRight({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  )
-}
+const navLinks = [
+  { label: "Beranda", href: "/" },
+  { label: "Event", href: "/event" },
+  { label: "Galeri", href: "/galery" },
+  { label: "Devisi", href: "/devisi" },
+  { label: "Aspirasi", href: "/aspirasi" },
+  { label: "Sertifikat", href: "/sertifikat" },
+]
 
 export default function Navbar() {
-  const [showAnnouncement, setShowAnnouncement] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  const cardItems: CardNavItem[] = [
-    {
-      label: "Beranda",
-      bgColor: "#1B1722",
-      textColor: "#fff",
-      links: [{ label: "Home", href: "/", ariaLabel: "Home" }],
-    },
-    {
-      label: "Informasi",
-      bgColor: "#2F293A",
-      textColor: "#fff",
-      links: [
-        { label: "Event", href: "/event", ariaLabel: "Event HMTIKA" },
-        { label: "Galeri", href: "/galery", ariaLabel: "Galeri HMTIKA" },
-        { label: "Berita", href: "/berita", ariaLabel: "Berita HMTIKA" },
-      ],
-    },
-    {
-      label: "Layanan",
-      bgColor: "#2F293A",
-      textColor: "#fff",
-      links: [
-        { label: "Aspirasi", href: "/aspirasi", ariaLabel: "Aspirasi" },
-        { label: "Sertifikat", href: "/sertifikat", ariaLabel: "Sertifikat" },
-        { label: "Devisi", href: "/devisi", ariaLabel: "Devisi HMTIKA" },
-      ],
-    },
-  ]
+  // Listen for ESC key to close the menu
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) {
+      window.addEventListener("keydown", handleKeyDown)
+      // Prevent scrolling when menu is open
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+      document.body.style.overflow = ""
+    }
+  }, [menuOpen])
 
   return (
-    <nav className="sticky top-0 z-50 w-full">
-      {/* ─── Announcement Bar ──────────────────────────────────────── */}
-      <div className={`bg-blue-900 transition-all duration-500 ease-in-out ${showAnnouncement ? "max-h-16 opacity-100" : "max-h-0 opacity-0 overflow-hidden py-0 border-transparent"
-        }`}>
-        <div className="mx-auto flex max-w-[1280px] items-center justify-center gap-2 px-4 py-[10px]">
-          <span className="font-heading text-sm text-slate-300">
-            Jangan lupa follow media sosial <span className="font-semibold text-slate-200">HMTIKA</span> Karena banyak hal yang seru !
-          </span>
-          <Link href="https://www.instagram.com/hmtika.sttb" className="group inline-flex items-center gap-1.5 font-heading text-sm font-semibold text-slate-200 hover:text-slate-200/80 transition-colors shrink-0 underline">
-            Instagram
-            <ArrowRight className="h-[18px] w-[18px] transition-transform group-hover:translate-x-0.5" />
-          </Link>
-          <button
-            onClick={() => setShowAnnouncement(false)}
-            className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-slate-200 hover:text-slate-200/60 hover:bg-slate-200/10 transition-colors shrink-0"
-            aria-label="Tutup pengumuman"
-          >
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/50 to-transparent">
+      <div className="mx-auto max-w-[1400px] px-6 md:px-12 py-6 flex items-center justify-between">
+
+        {/* ─── Logo (Serif Elegant style) ─── */}
+        <Link href="/" className="flex gap-2 items-center tracking-wide text-white drop-shadow-sm hover:opacity-85 transition-opacity">
+          <img src="/logo/logo.webp" alt="Logo_HMTIKA" className="h-10 w-auto" />
+        </Link>
+
+        {/* ─── Menu Toggle Button ─── */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex items-center gap-2 group text-white font-sans text-[13px] tracking-wider uppercase font-medium focus:outline-none"
+        >
+          <MdMenuOpen className="h-7 w-7" />
+        </button>
       </div>
 
-      {/* ─── CardNav ──────────────────────────────────────────────── */}
-      <div className="max-w-[1280px] mx-auto px-4 py-3">
-        <CardNav
-          logo="/logo/logo.webp"
-          logoAlt="HMTIKA"
-          items={cardItems}
-          baseColor="#303030"
-          menuColor="#fff"
-          buttonBgColor="#fff"
-          buttonTextColor="#111"
-          ctaLabel="Masuk"
-          ctaHref="/login"
-          ease="power3.out"
-        />
+      {/* ─── Backdrop overlay (click to close) ─── */}
+      <div
+        onClick={() => setMenuOpen(false)}
+        className={`fixed inset-0 bg-black/45 backdrop-blur-sm transition-opacity duration-500 z-30 ${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+      />
+
+      {/* ─── 1/4 Screen Width Sidebar Menu Panel (Desktop: 1/4, Mobile: Full) ─── */}
+      <div
+        className={`fixed top-0 bottom-0 right-0 left-auto w-full sm:w-[350px] md:w-1/4 h-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-40 border-l border-white/10 ${menuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        style={{
+          background: "radial-gradient(circle at right center, #181922 0%, #050508 100%)"
+        }}
+      >
+        {/* Close Button X (supporting ESC) */}
+        <button
+          onClick={() => setMenuOpen(false)}
+          className="absolute top-6 right-6 text-zinc-400 hover:text-white transition-colors p-2 focus:outline-none flex items-center gap-2 text-[10px] font-mono tracking-wider"
+          aria-label="Tutup menu"
+        >
+          <span>CLOSE (ESC)</span>
+          <X className="w-4.5 h-4.5" />
+        </button>
+
+        <div className="flex flex-col justify-between h-full px-8 py-20">
+
+          {/* Main Links (Sliding from Right to Left when Menu opens) */}
+          <div className="flex flex-col gap-5 mt-16 overflow-hidden">
+            <p className={`text-zinc-500 text-[10px] tracking-widest uppercase font-mono transition-all duration-500 delay-100 transform ${menuOpen ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'
+              }`}>
+              Navigasi
+            </p>
+
+            {navLinks.map((link, index) => {
+              const translateClass = menuOpen
+                ? 'translate-x-0 opacity-100'
+                : 'translate-x-20 opacity-0'
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`group flex items-center gap-3 text-2xl md:text-3xl font-light text-zinc-300 hover:text-white w-fit transition-all duration-700 cubic-bezier(0.16, 1, 0.3, 1) transform ${translateClass}`}
+                  style={{ transitionDelay: `${150 + index * 40}ms` }}
+                >
+                  <span className="font-serif italic text-lg md:text-xl text-zinc-600 group-hover:text-zinc-400 transition-colors">
+                    0{index + 1}
+                  </span>
+                  <span className="tracking-tight">{link.label}</span>
+                  <ArrowUpRight className="w-5 h-5 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 text-zinc-400" />
+                </Link>
+              )
+            })}
+          </div>
+
+          {/* Bottom Footer Info inside Menu */}
+          <div className={`border-t border-zinc-800/60 pt-6 flex flex-col gap-4 text-zinc-500 text-[10px] font-mono transition-all duration-700 delay-400 transform ${menuOpen ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'
+            }`}>
+            <div>
+              <p className="text-zinc-400 font-semibold mb-0.5">HMTIKA STMIK Tunas Bangsa</p>
+              <p>Wadah Inovasi & Kreativitas Mahasiswa</p>
+            </div>
+            <div className="flex gap-4">
+              <a href="https://www.instagram.com/hmtika.sttb" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+              <a href="#" className="hover:text-white transition-colors">YouTube</a>
+            </div>
+          </div>
+
+        </div>
       </div>
     </nav>
   )

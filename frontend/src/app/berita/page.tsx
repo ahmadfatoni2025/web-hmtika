@@ -10,6 +10,7 @@ import {
   Search,
   X,
 } from "lucide-react"
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton"
 
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([])
@@ -134,7 +135,19 @@ export default function NewsPage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="h-[420px] rounded-2xl glass-card-glowing animate-pulse" />
+              <div
+                key={i}
+                className="glass-card-glowing rounded-2xl overflow-hidden flex flex-col border border-white/5 p-5 gap-3"
+              >
+                <Skeleton className="h-48 w-full rounded-xl" />
+                <Skeleton className="h-6 w-3/4" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-4 w-16 rounded-full" />
+                  <Skeleton className="h-4 w-24 rounded-full" />
+                </div>
+                <SkeletonText lines={3} />
+                <Skeleton className="h-6 w-28 pt-2 mt-auto border-t border-white/[0.04]" />
+              </div>
             ))}
           </div>
         ) : filteredNews.length === 0 ? (

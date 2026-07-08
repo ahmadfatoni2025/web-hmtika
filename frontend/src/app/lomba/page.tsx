@@ -1,9 +1,18 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Calendar, MapPin, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton"
 
 export default function LombaPage() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600)
+    return () => clearTimeout(timer)
+  }, [])
+
   const competitions = [
     {
       title: "Hackathon Tunas Bangsa 2026",
@@ -89,53 +98,73 @@ export default function LombaPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {competitions.map((item, i) => (
-            <div
-              key={i}
-              className="group glass-card-glowing border border-white/5 rounded-2xl overflow-hidden flex flex-col hover:border-amber-gold/20 transition-all duration-300"
-            >
-              <div className="relative h-40 w-full bg-gradient-to-br from-amber-gold/10 via-zinc-900 to-zinc-950 flex items-center justify-center">
-                <span className="text-5xl font-black text-amber-gold/20 select-none">
-                  {item.category[0]}
-                </span>
-                <span className={`absolute top-3 left-3 inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold border backdrop-blur-md uppercase tracking-widest ${categoryColors[item.category] || "bg-zinc-500/10 border-zinc-500/30 text-zinc-400"}`}>
-                  {item.category}
-                </span>
-              </div>
-
-              <div className="flex flex-col flex-1 p-5 gap-3">
-                <h2 className="text-sm font-bold text-white leading-snug line-clamp-2 group-hover:text-amber-gold transition-colors">
-                  {item.title}
-                </h2>
-
-                <div className="flex items-center gap-2 text-xs text-zinc-500">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5 shrink-0" />
-                    <span className="line-clamp-1">{item.location}</span>
-                  </div>
-                  <span className="text-zinc-600">|</span>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5 shrink-0" />
-                    <span>{item.date}</span>
+          {loading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl overflow-hidden flex flex-col p-5 gap-4">
+                <Skeleton className="h-40 w-full rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-3/4" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-3 w-20" />
                   </div>
                 </div>
-
-                <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 flex-1">
-                  {item.desc}
-                </p>
-
-                <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
-                  <span>Kuota: {item.kuota} peserta</span>
-                  <span className="font-bold text-amber-gold">{item.prize}</span>
+                <SkeletonText lines={2} />
+                <div className="flex justify-between pt-2 mt-auto border-t border-white/[0.04]">
+                  <Skeleton className="h-3.5 w-24" />
+                  <Skeleton className="h-4 w-12" />
+                </div>
+              </div>
+            ))
+          ) : (
+            competitions.map((item, i) => (
+              <div
+                key={i}
+                className="group glass-card-glowing border border-white/5 rounded-2xl overflow-hidden flex flex-col hover:border-amber-gold/20 transition-all duration-300"
+              >
+                <div className="relative h-40 w-full bg-gradient-to-br from-amber-gold/10 via-zinc-900 to-zinc-950 flex items-center justify-center">
+                  <span className="text-5xl font-black text-amber-gold/20 select-none">
+                    {item.category[0]}
+                  </span>
+                  <span className={`absolute top-3 left-3 inline-flex items-center rounded-full px-2.5 py-0.5 text-[9px] font-bold border backdrop-blur-md uppercase tracking-widest ${categoryColors[item.category] || "bg-zinc-500/10 border-zinc-500/30 text-zinc-400"}`}>
+                    {item.category}
+                  </span>
                 </div>
 
-                <button className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-gold hover:text-amber-gold-light transition-colors mt-auto pt-2 border-t border-white/[0.04]">
-                  <ArrowRight className="h-3.5 w-3.5" />
-                  Daftar Sekarang
-                </button>
+                <div className="flex flex-col flex-1 p-5 gap-3">
+                  <h2 className="text-sm font-bold text-white leading-snug line-clamp-2 group-hover:text-amber-gold transition-colors">
+                    {item.title}
+                  </h2>
+
+                  <div className="flex items-center gap-2 text-xs text-zinc-500">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" />
+                      <span className="line-clamp-1">{item.location}</span>
+                    </div>
+                    <span className="text-zinc-600">|</span>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-3.5 w-3.5 shrink-0" />
+                      <span>{item.date}</span>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 flex-1">
+                    {item.desc}
+                  </p>
+
+                  <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
+                    <span>Kuota: {item.kuota} peserta</span>
+                    <span className="font-bold text-amber-gold">{item.prize}</span>
+                  </div>
+
+                  <button className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-gold hover:text-amber-gold-light transition-colors mt-auto pt-2 border-t border-white/[0.04]">
+                    <ArrowRight className="h-3.5 w-3.5" />
+                    Daftar Sekarang
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </main>

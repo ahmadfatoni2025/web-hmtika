@@ -1,8 +1,17 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Calendar, MapPin } from "lucide-react"
+import { Skeleton } from "@/components/ui/Skeleton"
 
 export default function KalenderPage() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   const months = [
     {
       month: "Januari",
@@ -72,30 +81,52 @@ export default function KalenderPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {months.map((m, i) => (
-            <div
-              key={i}
-              className="glass-card-glowing border border-white/5 rounded-2xl p-6"
-            >
-              <h3 className="text-base font-bold text-white mb-4 pb-3 border-b border-white/[0.06] flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-amber-gold" />
-                {m.month}
-              </h3>
-              <div className="space-y-4">
-                {m.events.map((event, j) => (
-                  <div key={j} className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-zinc-500 font-mono">{event.date}</span>
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[8px] font-bold border uppercase tracking-widest ${typeColors[event.type]}`}>
-                        {event.type}
-                      </span>
+          {loading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="glass-card-glowing border border-white/5 rounded-2xl p-6 space-y-4">
+                <div className="flex justify-between items-center pb-3 border-b border-white/[0.06]">
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-5 w-5 rounded-full" />
+                </div>
+                <div className="space-y-4">
+                  {Array.from({ length: 2 }).map((_, j) => (
+                    <div key={j} className="space-y-2">
+                      <div className="flex justify-between">
+                        <Skeleton className="h-3 w-16" />
+                        <Skeleton className="h-4 w-12 rounded-full" />
+                      </div>
+                      <Skeleton className="h-4.5 w-full" />
                     </div>
-                    <p className="text-xs text-white font-semibold leading-snug">{event.title}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            months.map((m, i) => (
+              <div
+                key={i}
+                className="glass-card-glowing border border-white/5 rounded-2xl p-6"
+              >
+                <h3 className="text-base font-bold text-white mb-4 pb-3 border-b border-white/[0.06] flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-amber-gold" />
+                  {m.month}
+                </h3>
+                <div className="space-y-4">
+                  {m.events.map((event, j) => (
+                    <div key={j} className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-zinc-500 font-mono">{event.date}</span>
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[8px] font-bold border uppercase tracking-widest ${typeColors[event.type]}`}>
+                          {event.type}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white font-semibold leading-snug">{event.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </main>
