@@ -47,3 +47,17 @@ export async function register(data: {
     body: JSON.stringify(data),
   })
 }
+
+export async function sendVerificationCode(email: string) {
+  return fetchAPI<ApiResponse<{ success: boolean }>>("/auth/send-verification", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  })
+}
+
+export async function verifyCode(email: string, code: string) {
+  return fetchAPI<ApiResponse<AuthResult>>("/auth/verify", {
+    method: "POST",
+    body: JSON.stringify({ email, code }),
+  })
+}

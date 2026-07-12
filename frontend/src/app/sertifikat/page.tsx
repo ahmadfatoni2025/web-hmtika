@@ -150,7 +150,7 @@ export default function SertifikatPage() {
                     href={
                       cert.file_url.startsWith("http")
                         ? cert.file_url
-                        : `http://localhost:3001${cert.file_url}`
+                        : `${(process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api").replace(/\/api$/, "")}${cert.file_url}`
                     }
                     target="_blank"
                     rel="noopener noreferrer"

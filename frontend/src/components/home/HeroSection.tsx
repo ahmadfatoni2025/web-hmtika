@@ -16,14 +16,21 @@ export default function HeroSection() {
 
             {/* Action Buttons */}
             <div className="flex flex-row items-center justify-center gap-4">
+                {/* Tombol Kirim Aspirasi (Buka Tab Baru) */}
                 <Link
                     href="/aspirasi"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="rounded-full bg-white px-7 py-3 text-xs sm:text-sm font-bold text-[#050505] hover:bg-zinc-100 transition-all shadow-xl shadow-white/5 flex items-center gap-2"
                 >
                     Kirim Aspirasi &rarr;
                 </Link>
+
+                {/* Tombol Daftar Event (Buka Tab Baru) */}
                 <Link
                     href="/event"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="rounded-full border border-white/10 bg-white/[0.03] px-7 py-3 text-xs sm:text-sm font-bold text-white hover:bg-white/[0.08] transition-all hover:border-white/20"
                 >
                     Daftar Event

@@ -14,6 +14,7 @@
   --color-dicoding: #211f1f;
   --color-dicoding-light: #211f1f;
   --color-dicoding-dark: #211f1f;
+  --color-nice-black: #050505;
 
 }
 
@@ -188,18 +189,17 @@ body::before {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.09) 37%,
-    rgba(255, 255, 255, 0.03) 63%
-  );
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.03) 25%,
+      rgba(255, 255, 255, 0.09) 37%,
+      rgba(255, 255, 255, 0.03) 63%);
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;
 }

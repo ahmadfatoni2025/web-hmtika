@@ -2,46 +2,48 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowLeft, AlertCircle } from "lucide-react"
+import { Mail, Lock, Eye, EyeOff, User, GraduationCap, Loader2, ArrowLeft, AlertCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import Stepper, { Step } from "@/components/ui/Stepper"
 import OtpInput from "@/components/ui/OtpInput"
-import { login, sendVerificationCode, verifyCode } from "@/lib/api/auth"
+import { register, sendVerificationCode, verifyCode } from "@/lib/api/auth"
 
-type View = "login" | "otp" | "success"
+type View = "register" | "otp" | "success"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const router = useRouter()
+  const [nama, setNama] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [angkatan, setAngkatan] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [view, setView] = useState<View>("login")
+  const [view, setView] = useState<View>("register")
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [resendCooldown, setResendCooldown] = useState(0)
-  const loginAttempted = useRef(false)
+  const submitAttempted = useRef(false)
 
   useEffect(() => {
     if (view === "success") router.replace("/dashboard")
   }, [view, router])
 
-  const handleLogin = async () => {
-    if (loginAttempted.current) return
-    loginAttempted.current = true
+  const handleSubmit = async () => {
+    if (submitAttempted.current) return
+    submitAttempted.current = true
     setLoading(true)
     setError("")
     try {
-      const res = await login(email, password)
+      const res = await register({ nama, email, password, angkatan })
       if (res?.data?.token) {
         localStorage.setItem("token", res.data.token)
       }
       router.replace("/dashboard")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Email atau password salah.")
+      setError(err instanceof Error ? err.message : "Pendaftaran gagal.")
       setLoading(false)
-      loginAttempted.current = false
+      submitAttempted.current = false
     }
   }
 
@@ -91,7 +93,7 @@ export default function LoginPage() {
       <main className="min-h-screen flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-sm space-y-8">
           <button
-            onClick={() => { setView("login"); setOtp(""); setError("") }}
+            onClick={() => { setView("register"); setOtp(""); setError("") }}
             className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
           >
             <ArrowLeft className="size-3.5" />
@@ -120,10 +122,7 @@ export default function LoginPage() {
             />
 
             {error && (
-              <div className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3">
-                <AlertCircle className="size-4 text-red-400 shrink-0" />
-                <p className="text-xs text-red-400">{error}</p>
-              </div>
+              <p className="text-xs text-red-400 text-center">{error}</p>
             )}
 
             <button
@@ -160,8 +159,8 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center size-14 rounded-2xl bg-white/[0.04] border border-white/[0.06] mb-2">
             <span className="text-xl font-bold text-amber-gold">H</span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-white">Masuk</h1>
-          <p className="text-sm text-zinc-400">Selamat datang kembali. Masuk ke akun HMTIKA Anda.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-white">Buat Akun Baru</h1>
+          <p className="text-sm text-zinc-400">Daftar untuk bergabung dengan HMTIKA.</p>
         </div>
 
         {error && (
@@ -174,24 +173,42 @@ export default function LoginPage() {
         <Stepper
           initialStep={1}
           backButtonText="Kembali"
-          nextButtonText={loading ? "Memproses…" : "Masuk"}
-          nextButtonProps={{ disabled: loading, onClick: handleLogin }}
+          nextButtonText={loading ? "Memproses…" : "Daftar"}
+          onComplete={handleSubmit}
         >
           <Step>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-zinc-100">
-                Email atau Username
-              </label>
-              <div className="relative">
-                <Mail className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
-                <Input
-                  id="email"
-                  type="text"
-                  placeholder="nama@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-11 bg-white/[0.04] border-white/[0.08] text-zinc-100 placeholder:text-zinc-500 focus-visible:border-amber-gold/30 focus-visible:ring-amber-gold/20"
-                />
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="nama" className="text-sm font-medium text-zinc-100">
+                  Nama Lengkap
+                </label>
+                <div className="relative">
+                  <User className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
+                  <Input
+                    id="nama"
+                    type="text"
+                    placeholder="Nama lengkap Anda"
+                    value={nama}
+                    onChange={(e) => setNama(e.target.value)}
+                    className="pl-10 h-11 bg-white/[0.04] border-white/[0.08] text-zinc-100 placeholder:text-zinc-500 focus-visible:border-amber-gold/30 focus-visible:ring-amber-gold/20"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium text-zinc-100">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="nama@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 h-11 bg-white/[0.04] border-white/[0.08] text-zinc-100 placeholder:text-zinc-500 focus-visible:border-amber-gold/30 focus-visible:ring-amber-gold/20"
+                  />
+                </div>
               </div>
             </div>
           </Step>
@@ -222,17 +239,67 @@ export default function LoginPage() {
                   </button>
                 </div>
               </div>
+              <div className="space-y-2">
+                <label htmlFor="angkatan" className="text-sm font-medium text-zinc-100">
+                  Angkatan
+                </label>
+                <div className="relative">
+                  <GraduationCap className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
+                  <Input
+                    id="angkatan"
+                    type="text"
+                    placeholder="Contoh: 2024"
+                    value={angkatan}
+                    onChange={(e) => setAngkatan(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    className="pl-10 h-11 bg-white/[0.04] border-white/[0.08] text-zinc-100 placeholder:text-zinc-500 focus-visible:border-amber-gold/30 focus-visible:ring-amber-gold/20"
+                  />
+                </div>
+              </div>
+            </div>
+          </Step>
+
+          <Step>
+            <div className="text-center space-y-4 py-4">
+              <div className="inline-flex items-center justify-center size-16 rounded-full bg-amber-gold/10 mx-auto">
+                <svg className="h-8 w-8 text-amber-gold" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-white">Konfirmasi Pendaftaran</h2>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Pastikan data Anda sudah benar.
+                </p>
+              </div>
+              <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 text-left space-y-2">
+                <div className="flex items-center gap-3">
+                  <User className="size-3.5 text-zinc-500 shrink-0" />
+                  <span className="text-xs text-zinc-300">{nama || "—"}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Mail className="size-3.5 text-zinc-500 shrink-0" />
+                  <span className="text-xs text-zinc-300">{email || "—"}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <GraduationCap className="size-3.5 text-zinc-500 shrink-0" />
+                  <span className="text-xs text-zinc-300">Angkatan {angkatan || "—"}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Lock className="size-3.5 text-zinc-500 shrink-0" />
+                  <span className="text-xs text-zinc-300">{"•".repeat(password.length) || "—"}</span>
+                </div>
+              </div>
             </div>
           </Step>
         </Stepper>
 
         <p className="text-center text-sm text-zinc-500">
-          Belum punya akun?{" "}
+          Sudah punya akun?{" "}
           <Link
-            href="/sigup"
+            href="/login"
             className="text-amber-gold hover:text-amber-gold-light transition-colors font-medium"
           >
-            Daftar
+            Masuk
           </Link>
         </p>
       </div>
