@@ -4,7 +4,7 @@ exports.getMe = async (req, res) => {
   try {
     const result = await db.query(
       `SELECT id, nama, email, angkatan, prodi, role, status, foto, created_at
-       FROM users WHERE id = $1`,
+       FROM users WHERE id = ?`,
       [req.user.id]
     );
     if (!result.rows[0]) {
@@ -19,13 +19,12 @@ exports.getMe = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const { nama, angkatan, prodi, foto } = req.body;
-    const result = await db.query(
-      `UPDATE users SET nama = $1, angkatan = $2, prodi = $3, foto = $4
-       WHERE id = $5
-       RETURNING id, nama, email, angkatan, prodi, role, status, foto`,
+    await db.query(
+      `UPDATE users SET nama = ?, angkatan = ?, prodi = ?, foto = ?
+       WHERE id = ?`,
       [nama, angkatan, prodi, foto, req.user.id]
     );
-    res.json({ success: true, message: "Profil diperbarui", data: result.rows[0] });
+    res.json({ success: true, message: "Profil diperbarui", data: { nama, angkatan, prodi, foto } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal memperbarui profil" });
   }
@@ -47,7 +46,7 @@ exports.getUser = async (req, res) => {
   try {
     const result = await db.query(
       `SELECT id, nama, email, angkatan, prodi, role, status, foto, created_at
-       FROM users WHERE id = $1`,
+       FROM users WHERE id = ?`,
       [req.params.id]
     );
     if (!result.rows[0]) {
@@ -63,12 +62,11 @@ exports.updateUser = async (req, res) => {
   try {
     const { nama, angkatan, prodi, role, status } = req.body;
     const result = await db.query(
-      `UPDATE users SET nama = $1, angkatan = $2, prodi = $3, role = $4, status = $5
-       WHERE id = $6
-       RETURNING id, nama, email, angkatan, prodi, role, status`,
+      `UPDATE users SET nama = ?, angkatan = ?, prodi = ?, role = ?, status = ?
+       WHERE id = ?`,
       [nama, angkatan, prodi, role, status, req.params.id]
     );
-    res.json({ success: true, message: "User diperbarui", data: result.rows[0] });
+    res.json({ success: true, message: "User diperbarui", data: { nama, angkatan, prodi, role, status } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal memperbarui user" });
   }
@@ -76,7 +74,7 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-    await db.query("DELETE FROM users WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM users WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "User berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus user" });
@@ -86,11 +84,11 @@ exports.deleteUser = async (req, res) => {
 exports.getDashboardStats = async (req, res) => {
   try {
     const [totalUsers, totalNews, totalEvents, totalAspirations, pendingAspirations] = await Promise.all([
-      db.query("SELECT COUNT(*) FROM users"),
-      db.query("SELECT COUNT(*) FROM news WHERE status = 'published'"),
-      db.query("SELECT COUNT(*) FROM events"),
-      db.query("SELECT COUNT(*) FROM aspirations"),
-      db.query("SELECT COUNT(*) FROM aspirations WHERE status = 'pending'"),
+      db.query("SELECT COUNT(*) AS count FROM users"),
+      db.query("SELECT COUNT(*) AS count FROM news WHERE status = 'published'"),
+      db.query("SELECT COUNT(*) AS count FROM events"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'pending'"),
     ]);
 
     res.json({

@@ -13,18 +13,17 @@ exports.getAllNews = async (req, res) => {
 
     let where = "WHERE n.status = 'published'";
     const params = [];
-    let paramIdx = 1;
 
     if (kategori) {
-      where += ` AND n.kategori = $${paramIdx++}`;
+      where += ` AND n.kategori = ?`;
       params.push(kategori);
     }
     if (search) {
-      where += ` AND n.judul ILIKE $${paramIdx++}`;
+      where += ` AND n.judul LIKE ?`;
       params.push(`%${search}%`);
     }
 
-    const countResult = await db.query(`SELECT COUNT(*) FROM news n ${where}`, params);
+    const countResult = await db.query(`SELECT COUNT(*) AS count FROM news n ${where}`, params);
     const total = parseInt(countResult.rows[0].count);
 
     params.push(limit);
@@ -34,8 +33,8 @@ exports.getAllNews = async (req, res) => {
        FROM news n
        LEFT JOIN users u ON n.author_id = u.id
        ${where}
-       ORDER BY n.tgl_publish DESC NULLS LAST
-       LIMIT $${paramIdx++} OFFSET $${paramIdx}`,
+       ORDER BY n.tgl_publish DESC 
+       LIMIT ? OFFSET ?`,
       params
     );
 
@@ -60,7 +59,7 @@ exports.getNewsBySlug = async (req, res) => {
       `SELECT n.*, u.id AS author_id, u.nama AS author_nama, u.foto AS author_foto
        FROM news n
        LEFT JOIN users u ON n.author_id = u.id
-       WHERE n.slug = $1`,
+       WHERE n.slug = ?`,
       [req.params.slug]
     );
     if (!result.rows[0]) {
@@ -88,12 +87,11 @@ exports.createNews = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO news (judul, slug, konten, ringkasan, thumbnail, kategori, status, author_id, tgl_publish)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING *`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [judul, slug, konten, ringkasan, thumbnail, kategori || "Umum", status || "draft", req.user.id, tglPublish]
     );
 
-    res.status(201).json({ success: true, message: "Berita berhasil dibuat", data: result.rows[0] });
+    res.status(201).json({ success: true, message: "Berita berhasil dibuat", data: { id: result.insertId } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Gagal membuat berita" });
@@ -105,14 +103,14 @@ exports.updateNews = async (req, res) => {
     const { judul, konten, ringkasan, kategori, status, thumbnail } = req.body;
     const tglPublish = status === "published" ? new Date() : undefined;
 
-    const result = await db.query(
-      `UPDATE news SET judul = $1, konten = $2, ringkasan = $3, kategori = $4,
-       status = $5, thumbnail = $6, tgl_publish = COALESCE($7, tgl_publish)
-       WHERE id = $8 RETURNING *`,
+    await db.query(
+      `UPDATE news SET judul = ?, konten = ?, ringkasan = ?, kategori = ?,
+       status = ?, thumbnail = ?, tgl_publish = COALESCE(?, tgl_publish)
+       WHERE id = ?`,
       [judul, konten, ringkasan, kategori, status, thumbnail, tglPublish, req.params.id]
     );
 
-    res.json({ success: true, message: "Berita diperbarui", data: result.rows[0] });
+    res.json({ success: true, message: "Berita diperbarui" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal memperbarui berita" });
   }
@@ -120,7 +118,7 @@ exports.updateNews = async (req, res) => {
 
 exports.deleteNews = async (req, res) => {
   try {
-    await db.query("DELETE FROM news WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM news WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Berita berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus berita" });
@@ -133,13 +131,13 @@ exports.getAllNewsAdmin = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
-    const countResult = await db.query("SELECT COUNT(*) FROM news");
+    const countResult = await db.query("SELECT COUNT(*) AS count FROM news");
     const total = parseInt(countResult.rows[0].count);
 
     const result = await db.query(
       `SELECT n.*, u.id AS author_id, u.nama AS author_nama
        FROM news n LEFT JOIN users u ON n.author_id = u.id
-       ORDER BY n.created_at DESC LIMIT $1 OFFSET $2`,
+       ORDER BY n.created_at DESC LIMIT ? OFFSET ?`,
       [limit, skip]
     );
 

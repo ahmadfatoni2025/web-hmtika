@@ -6,8 +6,8 @@ exports.registerEvent = async (req, res) => {
     const userId = req.user.id;
 
     const eventResult = await db.query(
-      `SELECT e.*, (SELECT COUNT(*) FROM registrations r WHERE r.event_id = e.id) AS reg_count
-       FROM events e WHERE e.id = $1`,
+      `SELECT e.*, (SELECT COUNT(*) AS count FROM registrations r WHERE r.event_id = e.id) AS reg_count
+       FROM events e WHERE e.id = ?`,
       [eventId]
     );
     const event = eventResult.rows[0];
@@ -19,7 +19,7 @@ exports.registerEvent = async (req, res) => {
     }
 
     const existing = await db.query(
-      `SELECT id FROM registrations WHERE event_id = $1 AND user_id = $2`,
+      `SELECT id FROM registrations WHERE event_id = ? AND user_id = ?`,
       [eventId, userId]
     );
     if (existing.rows[0]) {
@@ -27,11 +27,11 @@ exports.registerEvent = async (req, res) => {
     }
 
     const result = await db.query(
-      `INSERT INTO registrations (event_id, user_id) VALUES ($1, $2) RETURNING *`,
+      `INSERT INTO registrations (event_id, user_id) VALUES (?, ?)`,
       [eventId, userId]
     );
 
-    res.status(201).json({ success: true, message: "Berhasil mendaftar event", data: result.rows[0] });
+    res.status(201).json({ success: true, message: "Berhasil mendaftar event", data: { id: result.insertId } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal mendaftar event" });
   }
@@ -46,7 +46,7 @@ exports.getMyRegistrations = async (req, res) => {
        FROM registrations r
        JOIN events e ON r.event_id = e.id
        LEFT JOIN e_certificates ec ON ec.reg_id = r.id
-       WHERE r.user_id = $1
+       WHERE r.user_id = ?
        ORDER BY r.created_at DESC`,
       [req.user.id]
     );
@@ -75,7 +75,7 @@ exports.getAllRegistrations = async (req, res) => {
                  JOIN events e ON r.event_id = e.id`;
     const params = [];
     if (eventId) {
-      query += ` WHERE r.event_id = $1`;
+      query += ` WHERE r.event_id = ?`;
       params.push(eventId);
     }
     query += ` ORDER BY r.created_at DESC`;
@@ -97,11 +97,11 @@ exports.getAllRegistrations = async (req, res) => {
 exports.updateRegistration = async (req, res) => {
   try {
     const { statusHadir } = req.body;
-    const result = await db.query(
-      `UPDATE registrations SET status_hadir = $1 WHERE id = $2 RETURNING *`,
+    await db.query(
+      `UPDATE registrations SET status_hadir = ? WHERE id = ?`,
       [statusHadir, req.params.id]
     );
-    res.json({ success: true, message: "Status diperbarui", data: result.rows[0] });
+    res.json({ success: true, message: "Status diperbarui" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal memperbarui status" });
   }
@@ -109,7 +109,7 @@ exports.updateRegistration = async (req, res) => {
 
 exports.deleteRegistration = async (req, res) => {
   try {
-    await db.query("DELETE FROM registrations WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM registrations WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Pendaftaran berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus pendaftaran" });

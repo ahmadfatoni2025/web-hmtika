@@ -1,0 +1,97 @@
+.option-wheel {
+  --ow-text-color: #a6a6a6;
+  --ow-active-color: #ffffff;
+  --ow-font-size: 3rem;
+  --ow-inset: 80px;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  outline: none;
+}
+
+.option-wheel:focus-visible {
+  outline: 2px solid var(--ow-active-color);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.option-wheel--dragging {
+  cursor: grabbing;
+}
+
+/* Edge fade gradients */
+.option-wheel::before,
+.option-wheel::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.option-wheel::before {
+  top: 0;
+  height: 30%;
+  background: linear-gradient(to bottom, #050508 0%, transparent 100%);
+}
+
+.option-wheel::after {
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(to top, #050508 0%, transparent 100%);
+}
+
+.option-wheel__item {
+  position: absolute;
+  top: 50%;
+  left: var(--ow-inset);
+  white-space: nowrap;
+  font-size: var(--ow-font-size);
+  line-height: 1;
+  font-weight: 200;
+  transform-origin: left center;
+  cursor: pointer;
+  will-change: transform, opacity, filter;
+  color: color-mix(in srgb, var(--ow-active-color) calc(var(--ow-p, 0) * 100%), var(--ow-text-color));
+  transition: color 0.15s ease;
+}
+
+.option-wheel__item:hover {
+  filter: brightness(1.3);
+}
+
+.option-wheel--right .option-wheel__item {
+  left: auto;
+  right: var(--ow-inset);
+  transform-origin: right center;
+}
+
+.option-wheel__item--selected {
+  font-weight: 500;
+}
+
+.option-wheel__item--selected::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0.6em;
+  border-radius: 2px;
+  background: var(--ow-active-color);
+  opacity: 0.7;
+}
+
+.option-wheel:not(.option-wheel--right) .option-wheel__item--selected::before {
+  left: -16px;
+}
+
+.option-wheel--right .option-wheel__item--selected::before {
+  right: -16px;
+}

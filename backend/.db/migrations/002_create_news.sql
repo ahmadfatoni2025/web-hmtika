@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS news (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    judul VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL,
+    konten TEXT,
+    ringkasan TEXT,
+    thumbnail TEXT,
+    kategori VARCHAR(100) DEFAULT 'Umum',
+    status VARCHAR(50) DEFAULT 'draft',
+    author_id BIGINT,
+    tgl_publish TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE SET NULL
+);

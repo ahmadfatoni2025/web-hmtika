@@ -13,11 +13,11 @@ exports.createAspiration = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO aspirations (kategori, isi_aspirasi, is_anonymous, user_id)
-       VALUES ($1, $2, $3, $4) RETURNING id`,
+       VALUES (?, ?, ?, ?)`,
       [kategori, isiAspirasi, isAnon, userId]
     );
 
-    res.status(201).json({ success: true, message: "Aspirasi berhasil dikirim", data: { id: result.rows[0].id } });
+    res.status(201).json({ success: true, message: "Aspirasi berhasil dikirim", data: { id: result.insertId } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal mengirim aspirasi" });
   }
@@ -32,25 +32,24 @@ exports.getAllAspirations = async (req, res) => {
 
     let where = "";
     const params = [];
-    let idx = 1;
 
     if (req.user && req.user.role !== "admin") {
-      where = ` WHERE a.user_id = $${idx++}`;
+      where = ` WHERE a.user_id = ?`;
       params.push(req.user.id);
     }
 
     if (kategori) {
       where += where ? " AND" : " WHERE";
-      where += ` a.kategori = $${idx++}`;
+      where += ` a.kategori = ?`;
       params.push(kategori);
     }
     if (status) {
       where += where ? " AND" : " WHERE";
-      where += ` a.status = $${idx++}`;
+      where += ` a.status = ?`;
       params.push(status);
     }
 
-    const countResult = await db.query(`SELECT COUNT(*) FROM aspirations a ${where}`, params);
+    const countResult = await db.query(`SELECT COUNT(*) AS count FROM aspirations a ${where}`, params);
     const total = parseInt(countResult.rows[0].count);
 
     params.push(limit);
@@ -61,7 +60,7 @@ exports.getAllAspirations = async (req, res) => {
        LEFT JOIN users u ON a.user_id = u.id
        ${where}
        ORDER BY a.created_at DESC
-       LIMIT $${idx++} OFFSET $${idx}`,
+       LIMIT ? OFFSET ?`,
       params
     );
 
@@ -82,10 +81,10 @@ exports.respondAspiration = async (req, res) => {
   try {
     const { responAdmin, status } = req.body;
     const result = await db.query(
-      `UPDATE aspirations SET respon_admin = $1, status = $2 WHERE id = $3 RETURNING *`,
+      `UPDATE aspirations SET respon_admin = ?, status = ? WHERE id = ?`,
       [responAdmin, status || "reviewed", req.params.id]
     );
-    res.json({ success: true, message: "Respon berhasil disimpan", data: result.rows[0] });
+    res.json({ success: true, message: "Respon berhasil disimpan", data: { responAdmin, status: status || "reviewed" } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menyimpan respon" });
   }
@@ -93,7 +92,7 @@ exports.respondAspiration = async (req, res) => {
 
 exports.deleteAspiration = async (req, res) => {
   try {
-    await db.query("DELETE FROM aspirations WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM aspirations WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Aspirasi berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus aspirasi" });
@@ -103,10 +102,10 @@ exports.deleteAspiration = async (req, res) => {
 exports.getAspirationStats = async (req, res) => {
   try {
     const [total, pending, reviewed, resolved, byCategory] = await Promise.all([
-      db.query("SELECT COUNT(*) FROM aspirations"),
-      db.query("SELECT COUNT(*) FROM aspirations WHERE status = 'pending'"),
-      db.query("SELECT COUNT(*) FROM aspirations WHERE status = 'reviewed'"),
-      db.query("SELECT COUNT(*) FROM aspirations WHERE status = 'resolved'"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'pending'"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'reviewed'"),
+      db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'resolved'"),
       db.query("SELECT kategori, COUNT(*) FROM aspirations GROUP BY kategori"),
     ]);
 
