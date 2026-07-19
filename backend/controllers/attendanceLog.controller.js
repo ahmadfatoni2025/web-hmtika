@@ -5,7 +5,7 @@ exports.checkIn = async (req, res) => {
     const { kodeAbsen } = req.params;
     const userId = req.user.id;
 
-    const attResult = await db.query("SELECT * FROM attendances WHERE kode_absen = $1", [kodeAbsen]);
+    const attResult = await db.query("SELECT * FROM attendances WHERE kode_absen = ?", [kodeAbsen]);
     const attendance = attResult.rows[0];
     if (!attendance) {
       return res.status(404).json({ success: false, message: "Kode absen tidak valid" });
@@ -19,7 +19,7 @@ exports.checkIn = async (req, res) => {
     }
 
     const existing = await db.query(
-      `SELECT id FROM attendance_logs WHERE attendance_id = $1 AND user_id = $2`,
+      `SELECT id FROM attendance_logs WHERE attendance_id = ? AND user_id = ?`,
       [attendance.id, userId]
     );
     if (existing.rows[0]) {
@@ -27,11 +27,11 @@ exports.checkIn = async (req, res) => {
     }
 
     const result = await db.query(
-      `INSERT INTO attendance_logs (attendance_id, user_id) VALUES ($1, $2) RETURNING *`,
+      `INSERT INTO attendance_logs (attendance_id, user_id) VALUES (?, ?)`,
       [attendance.id, userId]
     );
 
-    res.status(201).json({ success: true, message: "Absensi berhasil dicatat", data: result.rows[0] });
+    res.status(201).json({ success: true, message: "Absensi berhasil dicatat", data: { id: result.insertId } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Gagal melakukan absensi" });
@@ -46,7 +46,7 @@ exports.getMyAttendances = async (req, res) => {
        FROM attendance_logs al
        JOIN attendances a ON al.attendance_id = a.id
        JOIN events e ON a.event_id = e.id
-       WHERE al.user_id = $1
+       WHERE al.user_id = ?
        ORDER BY al.waktu_absen DESC`,
       [req.user.id]
     );
@@ -62,7 +62,7 @@ exports.getLogsByAttendance = async (req, res) => {
       `SELECT al.*, u.id AS user_id_data, u.nama AS user_nama, u.angkatan AS user_angkatan
        FROM attendance_logs al
        JOIN users u ON al.user_id = u.id
-       WHERE al.attendance_id = $1
+       WHERE al.attendance_id = ?
        ORDER BY al.waktu_absen ASC`,
       [req.params.attendanceId]
     );
@@ -74,7 +74,7 @@ exports.getLogsByAttendance = async (req, res) => {
 
 exports.deleteLog = async (req, res) => {
   try {
-    await db.query("DELETE FROM attendance_logs WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM attendance_logs WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Log absensi berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus log absensi" });

@@ -21,7 +21,7 @@ exports.getMemberById = async (req, res) => {
       `SELECT m.*, d.name AS division_name
        FROM members m
        JOIN divisions d ON m.division_id = d.id
-       WHERE m.id = $1`,
+       WHERE m.id = ?`,
       [req.params.id]
     );
     if (!result.rows[0]) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
@@ -39,12 +39,12 @@ exports.createMember = async (req, res) => {
     }
     const result = await db.query(
       `INSERT INTO members (name, division_id, photo_url, social_media_url, description)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+       VALUES (?, ?, ?, ?, ?)`,
       [name, division_id, photo_url, social_media_url || null, description || null]
     );
-    res.status(201).json({ success: true, message: "Anggota berhasil ditambahkan", data: result.rows[0] });
+    res.status(201).json({ success: true, message: "Anggota berhasil ditambahkan", data: { id: result.insertId, name, division_id, photo_url } });
   } catch (error) {
-    if (error.code === "23503") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
+    if (error.code === "1451") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
     console.error(error);
     res.status(500).json({ success: false, message: "Gagal menambahkan anggota" });
   }
@@ -55,27 +55,27 @@ exports.updateMember = async (req, res) => {
     const { name, division_id, photo_url, social_media_url, description } = req.body;
     const result = await db.query(
       `UPDATE members
-       SET name = COALESCE($1, name),
-           division_id = COALESCE($2, division_id),
-           photo_url = COALESCE($3, photo_url),
-           social_media_url = COALESCE($4, social_media_url),
-           description = COALESCE($5, description),
+       SET name = COALESCE(?, name),
+           division_id = COALESCE(?, division_id),
+           photo_url = COALESCE(?, photo_url),
+           social_media_url = COALESCE(?, social_media_url),
+           description = COALESCE(?, description),
            updated_at = NOW()
-       WHERE id = $6 RETURNING *`,
+       WHERE id = ?`,
       [name, division_id, photo_url, social_media_url, description, req.params.id]
     );
-    if (!result.rows[0]) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
-    res.json({ success: true, message: "Anggota diperbarui", data: result.rows[0] });
+    if (!result.affectedRows) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
+    res.json({ success: true, message: "Anggota diperbarui" });
   } catch (error) {
-    if (error.code === "23503") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
+    if (error.code === "1451") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
     res.status(500).json({ success: false, message: "Gagal memperbarui anggota" });
   }
 };
 
 exports.deleteMember = async (req, res) => {
   try {
-    const result = await db.query("DELETE FROM members WHERE id = $1 RETURNING id", [req.params.id]);
-    if (!result.rows[0]) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
+    const result = await db.query("DELETE FROM members WHERE id = ?", [req.params.id]);
+    if (!result.affectedRows) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
     res.json({ success: true, message: "Anggota berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus anggota" });

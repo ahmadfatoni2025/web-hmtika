@@ -9,9 +9,11 @@ import FAQ from "@/components/home/FAQ"
 
 export default function Home() {
   return (
-    <main className="w-full min-h-auto text-zinc-100 overflow-x-hidden pb-20">
+    <div className="w-full text-zinc-100 overflow-x-hidden pb-20">
 
-      <HeroLayout />
+      <div className="-mt-[128px] pt-[32px]">
+        <HeroLayout />
+      </div>
 
       {/* Kolaborasi */}
       <Collaborators />
@@ -27,6 +29,6 @@ export default function Home() {
 
       {/* FAQ */}
       <FAQ />
-    </main>
+    </div>
   )
 }

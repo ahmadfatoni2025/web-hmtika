@@ -6,9 +6,6 @@ export default function HeroSection() {
         <>
             {/* Hero Typography Heading */}
             <div className="space-y-4 mt-18 text-center max-w-3xl">
-                <div className="flex flex-row items-center justify-center gap-4">
-                    <input type="text" className="p-3 w-96 h-10 focus:outline-slate-100/5 shadow-amber-200/40 rounded-full border border-zinc-400/30 bg-black/20 backdrop-blur-sm text-white placeholder:text-white/50" placeholder="Cari yang kamu inginkan di sini..." />
-                </div>
                 <h1 className="text-2xl sm:text-3xl md:text-6xl font-medium leading-[1.08] tracking-tight text-zinc-100 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
                     Jangan lupa Titik Koma.
                 </h1>

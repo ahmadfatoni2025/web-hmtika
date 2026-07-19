@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { getEvents, getEventBySlug } from "@/lib/api"
+import Image from "next/image"
 import type { EventItem } from "@/lib/api"
 import {
   Calendar,
@@ -23,6 +24,8 @@ export default function EventPage() {
   const [regModalOpen, setRegModalOpen] = useState(false)
 
   const statuses = ["Semua", "Upcoming", "Ongoing", "Completed"]
+  const openedFromUrl = useRef(false)
+  const slugParam = searchParams.get("slug")
 
   useEffect(() => {
     async function loadEvents() {
@@ -45,13 +48,6 @@ export default function EventPage() {
     loadEvents()
   }, [selectedStatus, page])
 
-  useEffect(() => {
-    const slug = searchParams.get("slug")
-    if (slug && events.length > 0) {
-      openEventDetail(slug)
-    }
-  }, [searchParams, events])
-
   const openEventDetail = async (slug: string) => {
     try {
       const res = await getEventBySlug(slug)
@@ -66,6 +62,14 @@ export default function EventPage() {
       if (item) setSelectedEvent(item)
     }
   }
+
+  useEffect(() => {
+    if (slugParam && events.length > 0 && !openedFromUrl.current) {
+      openedFromUrl.current = true
+      openEventDetail(slugParam)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slugParam, events])
 
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString("id-ID", {
@@ -153,10 +157,12 @@ export default function EventPage() {
                   className="relative h-48 w-full bg-gradient-to-br from-amber-gold/10 via-zinc-900 to-zinc-950 flex items-center justify-center cursor-pointer overflow-hidden"
                 >
                   {event.thumbnail ? (
-                    <img
+                    <Image
                       src={event.thumbnail}
                       alt={event.judul}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <ImageIcon className="h-12 w-12 text-zinc-600/50" />
@@ -286,8 +292,14 @@ export default function EventPage() {
             </div>
 
             {selectedEvent.thumbnail && (
-              <div className="w-full h-64 rounded-xl overflow-hidden mb-6 border border-white/5">
-                <img src={selectedEvent.thumbnail} alt={selectedEvent.judul} className="w-full h-full object-cover" />
+              <div className="relative w-full h-64 rounded-xl overflow-hidden mb-6 border border-white/5">
+                <Image
+                  src={selectedEvent.thumbnail}
+                  alt={selectedEvent.judul}
+                  fill
+                  sizes="(max-width: 672px) 100vw, 672px"
+                  className="object-cover"
+                />
               </div>
             )}
 

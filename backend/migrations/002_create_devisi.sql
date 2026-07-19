@@ -1,8 +1,8 @@
-CREATE TABLE devisi (
-    id BIGSERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS devisi (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,
     avatar_url TEXT,
-    social_links JSONB DEFAULT '[]',
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    social_links JSON DEFAULT '[]',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

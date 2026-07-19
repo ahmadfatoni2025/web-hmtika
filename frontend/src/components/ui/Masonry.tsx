@@ -102,7 +102,7 @@ const Masonry = ({
 
     switch (direction) {
       case "top":
-        return { x: item.x, y: -200 }
+        return { x: item.x, y: -600 }
       case "bottom":
         return { x: item.x, y: window.innerHeight + 200 }
       case "left":
@@ -123,13 +123,13 @@ const Masonry = ({
     preloadImages(items.map((i) => i.img)).then(() => setImagesReady(true))
   }, [items])
 
-  const grid = useMemo(() => {
-    if (!width) return [] as (MasonryItem & { x: number; y: number; w: number; h: number })[]
+  const { grid, gridHeight } = useMemo(() => {
+    if (!width) return { grid: [] as (MasonryItem & { x: number; y: number; w: number; h: number })[], gridHeight: 400 }
 
     const colHeights = new Array(columns).fill(0)
     const columnWidth = width / columns
 
-    return items.map((child) => {
+    const result = items.map((child) => {
       const col = colHeights.indexOf(Math.min(...colHeights))
       const x = columnWidth * col
       const height = child.height / 2
@@ -139,6 +139,8 @@ const Masonry = ({
 
       return { ...child, x, y, w: columnWidth, h: height }
     })
+
+    return { grid: result, gridHeight: Math.max(...colHeights, 400) }
   }, [columns, items, width])
 
   const hasMounted = useRef(false)
@@ -233,7 +235,7 @@ const Masonry = ({
   }
 
   return (
-    <div ref={containerRef} className="masonry-list">
+    <div ref={containerRef} className="masonry-list" style={{ height: gridHeight }}>
       {grid.map((item) => (
         <div
           key={item.id}

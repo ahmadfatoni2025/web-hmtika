@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS attendances (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    event_id BIGINT NOT NULL,
+    nama_sesi VARCHAR(255) NOT NULL,
+    kode_absen VARCHAR(10) UNIQUE NOT NULL,
+    waktu_buka TIMESTAMP NOT NULL,
+    waktu_tutup TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);

@@ -10,7 +10,9 @@ exports.getMyCertificates = async (req, res) => {
        FROM e_certificates ec
        JOIN registrations r ON ec.reg_id = r.id
        JOIN events e ON r.event_id = e.id
-       ORDER BY ec.tgl_terbit DESC`
+       WHERE r.user_id = ?
+       ORDER BY ec.tgl_terbit DESC`,
+      [req.user.id]
     );
     res.json({ success: true, data: result.rows });
   } catch {
@@ -27,14 +29,14 @@ exports.generateCertificate = async (req, res) => {
        FROM registrations r
        JOIN users u ON r.user_id = u.id
        JOIN events e ON r.event_id = e.id
-       WHERE r.id = $1`,
+       WHERE r.id = ?`,
       [registrationId]
     );
     if (!regResult.rows[0]) {
       return res.status(404).json({ success: false, message: "Data pendaftaran tidak ditemukan" });
     }
 
-    const existing = await db.query("SELECT id FROM e_certificates WHERE reg_id = $1", [registrationId]);
+    const existing = await db.query("SELECT id FROM e_certificates WHERE reg_id = ?", [registrationId]);
     if (existing.rows[0]) {
       return res.status(409).json({ success: false, message: "Sertifikat sudah diterbitkan" });
     }
@@ -44,16 +46,16 @@ exports.generateCertificate = async (req, res) => {
 
     const certResult = await db.query(
       `INSERT INTO e_certificates (reg_id, nomor_sertif, file_url)
-       VALUES ($1, $2, $3) RETURNING *`,
+       VALUES (?, ?, ?)`,
       [registrationId, nomorSertif, fileUrl]
     );
 
     await db.query(
-      `UPDATE registrations SET status_hadir = 'hadir' WHERE id = $1`,
+      `UPDATE registrations SET status_hadir = 'hadir' WHERE id = ?`,
       [registrationId]
     );
 
-    res.status(201).json({ success: true, message: "Sertifikat berhasil diterbitkan", data: certResult.rows[0] });
+    res.status(201).json({ success: true, message: "Sertifikat berhasil diterbitkan", data: { id: certResult.insertId, nomor_sertif: nomorSertif, file_url: fileUrl } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menerbitkan sertifikat" });
   }
@@ -66,21 +68,21 @@ exports.generateBulkCertificates = async (req, res) => {
     const regsResult = await db.query(
       `SELECT r.id
        FROM registrations r
-       WHERE r.event_id = $1 AND r.status_hadir = 'hadir'`,
+       WHERE r.event_id = ? AND r.status_hadir = 'hadir'`,
       [eventId]
     );
 
     const results = [];
     for (const reg of regsResult.rows) {
-      const existing = await db.query("SELECT id FROM e_certificates WHERE reg_id = $1", [reg.id]);
+      const existing = await db.query("SELECT id FROM e_certificates WHERE reg_id = ?", [reg.id]);
       if (!existing.rows[0]) {
         const nomorSertif = `HMTIKA/${new Date().getFullYear()}/${uuidv4().substring(0, 8).toUpperCase()}`;
         const fileUrl = `/uploads/certificates/${nomorSertif.replace(/\//g, "-")}.pdf`;
         const cert = await db.query(
-          `INSERT INTO e_certificates (reg_id, nomor_sertif, file_url) VALUES ($1, $2, $3) RETURNING *`,
+          `INSERT INTO e_certificates (reg_id, nomor_sertif, file_url) VALUES (?, ?, ?)`,
           [reg.id, nomorSertif, fileUrl]
         );
-        results.push(cert.rows[0]);
+        results.push({ id: cert.insertId, reg_id: reg.id, nomor_sertif: nomorSertif, file_url: fileUrl });
       }
     }
 
@@ -109,7 +111,7 @@ exports.getAllCertificates = async (req, res) => {
 
 exports.deleteCertificate = async (req, res) => {
   try {
-    await db.query("DELETE FROM e_certificates WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM e_certificates WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Sertifikat berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus sertifikat" });

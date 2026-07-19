@@ -18,7 +18,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ success: false, message: "Semua field wajib diisi" });
     }
 
-    const existing = await db.query("SELECT id FROM users WHERE email = $1", [email]);
+    const existing = await db.query("SELECT id FROM users WHERE email = ?", [email]);
     if (existing.rows.length > 0) {
       return res.status(409).json({ success: false, message: "Email sudah terdaftar" });
     }
@@ -26,12 +26,17 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
     const result = await db.query(
       `INSERT INTO users (nama, email, password, angkatan, prodi)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, nama, email, angkatan, prodi, role, status, created_at`,
+       VALUES (?, ?, ?, ?, ?)`,
       [nama, email, hashedPassword, angkatan, prodi || "Informatika"]
     );
 
-    const user = result.rows[0];
+    const userResult = await db.query(
+      `SELECT id, nama, email, angkatan, prodi, role, status, created_at
+       FROM users WHERE id = ?`,
+      [result.insertId]
+    );
+
+    const user = userResult.rows[0];
     const token = generateToken(user);
 
     res.status(201).json({ success: true, message: "Registrasi berhasil", data: { user, token } });
@@ -49,7 +54,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ success: false, message: "Email dan password wajib diisi" });
     }
 
-    const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+    const result = await db.query("SELECT * FROM users WHERE email = ?", [email]);
     const user = result.rows[0];
     if (!user) {
       return res.status(401).json({ success: false, message: "Email atau password salah" });

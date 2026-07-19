@@ -13,24 +13,23 @@ exports.getAllEvents = async (req, res) => {
 
     let where = "";
     const params = [];
-    let idx = 1;
 
-    if (status) { where += ` WHERE e.status = $${idx++}`; params.push(status); }
+    if (status) { where += ` WHERE e.status = ?`; params.push(status); }
     if (kategori) {
       where += where ? " AND" : " WHERE";
-      where += ` e.kategori = $${idx++}`;
+      where += ` e.kategori = ?`;
       params.push(kategori);
     }
 
-    const countResult = await db.query(`SELECT COUNT(*) FROM events e ${where}`, params);
+    const countResult = await db.query(`SELECT COUNT(*) AS count FROM events e ${where}`, params);
     const total = parseInt(countResult.rows[0].count);
 
     params.push(limit);
     params.push(skip);
     const result = await db.query(
-      `SELECT e.*, (SELECT COUNT(*) FROM registrations r WHERE r.event_id = e.id) AS registration_count
+      `SELECT e.*, (SELECT COUNT(*) AS count FROM registrations r WHERE r.event_id = e.id) AS registration_count
        FROM events e ${where}
-       ORDER BY e.tanggal ASC LIMIT $${idx++} OFFSET $${idx}`,
+       ORDER BY e.tanggal ASC LIMIT ? OFFSET ?`,
       params
     );
 
@@ -44,8 +43,8 @@ exports.getAllEvents = async (req, res) => {
 exports.getEventBySlug = async (req, res) => {
   try {
     const result = await db.query(
-      `SELECT e.*, (SELECT COUNT(*) FROM registrations r WHERE r.event_id = e.id) AS registration_count
-       FROM events e WHERE e.slug = $1`,
+      `SELECT e.*, (SELECT COUNT(*) AS count FROM registrations r WHERE r.event_id = e.id) AS registration_count
+       FROM events e WHERE e.slug = ?`,
       [req.params.slug]
     );
     if (!result.rows[0]) {
@@ -64,8 +63,7 @@ exports.createEvent = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO events (judul, slug, deskripsi, thumbnail, tanggal, tanggal_akhir, lokasi, kuota, biaya, status, kategori)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-       RETURNING *`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         judul, slug, deskripsi, thumbnail,
         new Date(tanggal), tanggalAkhir ? new Date(tanggalAkhir) : null,
@@ -74,7 +72,7 @@ exports.createEvent = async (req, res) => {
       ]
     );
 
-    res.status(201).json({ success: true, message: "Event berhasil dibuat", data: result.rows[0] });
+    res.status(201).json({ success: true, message: "Event berhasil dibuat", data: { id: result.insertId } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal membuat event" });
   }
@@ -86,12 +84,12 @@ exports.updateEvent = async (req, res) => {
 
     const result = await db.query(
       `UPDATE events SET
-        judul = COALESCE($1, judul), deskripsi = COALESCE($2, deskripsi),
-        tanggal = COALESCE($3, tanggal), tanggal_akhir = $4,
-        lokasi = COALESCE($5, lokasi), kuota = COALESCE($6, kuota),
-        biaya = COALESCE($7, biaya), kategori = COALESCE($8, kategori),
-        status = COALESCE($9, status), thumbnail = COALESCE($10, thumbnail)
-       WHERE id = $11 RETURNING *`,
+        judul = COALESCE(?, judul), deskripsi = COALESCE(?, deskripsi),
+        tanggal = COALESCE(?, tanggal), tanggal_akhir = COALESCE(?, tanggal_akhir),
+        lokasi = COALESCE(?, lokasi), kuota = COALESCE(?, kuota),
+        biaya = COALESCE(?, biaya), kategori = COALESCE(?, kategori),
+        status = COALESCE(?, status), thumbnail = COALESCE(?, thumbnail)
+       WHERE id = ?`,
       [
         judul, deskripsi, tanggal ? new Date(tanggal) : undefined,
         tanggalAkhir ? new Date(tanggalAkhir) : null,
@@ -101,7 +99,7 @@ exports.updateEvent = async (req, res) => {
       ]
     );
 
-    res.json({ success: true, message: "Event diperbarui", data: result.rows[0] });
+    res.json({ success: true, message: "Event diperbarui" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal memperbarui event" });
   }
@@ -109,7 +107,7 @@ exports.updateEvent = async (req, res) => {
 
 exports.deleteEvent = async (req, res) => {
   try {
-    await db.query("DELETE FROM events WHERE id = $1", [req.params.id]);
+    await db.query("DELETE FROM events WHERE id = ?", [req.params.id]);
     res.json({ success: true, message: "Event berhasil dihapus" });
   } catch {
     res.status(500).json({ success: false, message: "Gagal menghapus event" });

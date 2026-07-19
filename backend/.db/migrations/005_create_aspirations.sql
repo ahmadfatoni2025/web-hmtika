@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS aspirations (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    kategori VARCHAR(100) NOT NULL,
+    isi_aspirasi TEXT NOT NULL,
+    is_anonymous TINYINT(1) DEFAULT 0,
+    user_id BIGINT,
+    status VARCHAR(50) DEFAULT 'pending',
+    respon_admin TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);

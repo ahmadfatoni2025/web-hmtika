@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS members (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    division_id BIGINT NOT NULL,
+    photo_url TEXT NOT NULL,
+    social_media_url TEXT,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (division_id) REFERENCES divisions(id) ON DELETE CASCADE
+);
