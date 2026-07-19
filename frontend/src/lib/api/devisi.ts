@@ -45,6 +45,12 @@ export async function getMemberById(id: number) {
   return fetchAPI<ApiResponse<MemberItem>>(`/members/${id}`)
 }
 
+/** GET /api/divisions */
+export async function getDivisions() {
+  return fetchAPI<{ success: boolean; data: Division[] }>("/divisions")
+}
+
+
 // ─── Admin Endpoints ─────────────────────────────────────────────
 
 /** POST /api/members */
@@ -61,8 +67,7 @@ export async function createMember(
 
 /** PUT /api/members/:id */
 export async function updateMember(
-  token: string,
-  id: number,
+  token: string, id: number,
   data: { name?: string; division_id?: number; photo_url?: string; social_media_url?: string; description?: string }
 ) {
   return fetchAPI<ApiResponse<MemberItem>>(`/members/${id}`, {

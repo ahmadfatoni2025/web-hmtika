@@ -1,10 +1,9 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import Link from "next/link"
-import { ArrowRight, Zap, MessageSquare } from "lucide-react"
 import Mockup from "./Mockup"
 import TombolActionHome from "./TombolActionHome"
+import LineWaves from "./LineWaves"
 
 export default function HeroLayout() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -28,19 +27,24 @@ export default function HeroLayout() {
       className="relative w-full overflow-hidden"
       style={{ background: "#050505", minHeight: "100vh" }}
     >
-      {/* Full-Screen Nature Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <video
-          src="/videos/bg2.mp4"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          autoPlay
-          loop
-          muted
-          playsInline
+      {/* Full-Screen Wave Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <LineWaves
+          speed={0.2}
+          innerLineCount={24}
+          outerLineCount={28}
+          warpIntensity={0.8}
+          rotation={-30}
+          edgeFadeWidth={0.1}
+          colorCycleSpeed={0.5}
+          brightness={0.15}
+          color1="#d4a853"
+          color2="#ffffff"
+          color3="#a3a3a3"
+          enableMouseInteraction={true}
+          mouseInfluence={1.5}
         />
-
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#050505]/80 to-transparent" />
-
         <div className="absolute bottom-0 left-0 right-0 h-[45%] bg-gradient-to-t from-[#050505] via-[#050505]/60 to-transparent" />
       </div>
 

@@ -3,20 +3,22 @@ const db = require("../config/db");
 
 exports.getMyCertificates = async (req, res) => {
   try {
-    const result = await db.query(
-      `SELECT ec.*, e.id AS event_id, e.judul AS event_judul,
-              e.tanggal AS event_tanggal, e.lokasi AS event_lokasi,
-              e.slug AS event_slug
-       FROM e_certificates ec
-       JOIN registrations r ON ec.reg_id = r.id
-       JOIN events e ON r.event_id = e.id
-       WHERE r.user_id = ?
-       ORDER BY ec.tgl_terbit DESC`,
-      [req.user.id]
-    );
-    res.json({ success: true, data: result.rows });
+    let query = `SELECT ec.*, e.id AS event_id, e.judul AS event_judul,
+                        e.tanggal AS event_tanggal, e.lokasi AS event_lokasi,
+                        e.slug AS event_slug
+                 FROM e_certificates ec
+                 JOIN registrations r ON ec.reg_id = r.id
+                 JOIN events e ON r.event_id = e.id`
+    const params = []
+    if (req.user) {
+      query += ` WHERE r.user_id = ?`
+      params.push(req.user.id)
+    }
+    query += ` ORDER BY ec.tgl_terbit DESC`
+    const result = await db.query(query, params)
+    res.json({ success: true, data: result.rows })
   } catch {
-    res.status(500).json({ success: false, message: "Gagal mengambil sertifikat" });
+    res.status(500).json({ success: false, message: "Gagal mengambil sertifikat" })
   }
 };
 

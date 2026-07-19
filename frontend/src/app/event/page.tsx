@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { Suspense, useState, useEffect, useRef } from "react"
 import { useSearchParams } from "next/navigation"
 import { getEvents, getEventBySlug } from "@/lib/api"
 import Image from "next/image"
@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react"
 
-export default function EventPage() {
+function EventPageContent() {
   const searchParams = useSearchParams()
   const [events, setEvents] = useState<EventItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -356,5 +356,13 @@ export default function EventPage() {
         </div>
       )}
     </main>
+  )
+}
+
+export default function EventPage() {
+  return (
+    <Suspense fallback={null}>
+      <EventPageContent />
+    </Suspense>
   )
 }
