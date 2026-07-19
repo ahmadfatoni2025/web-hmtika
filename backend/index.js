@@ -26,6 +26,7 @@ app.use("/api/aspirations", require("./routes/aspiration.routes"));
 app.use("/api/images", require("./routes/image.routes"));
 app.use("/api/divisions", require("./routes/division.routes"));
 app.use("/api/members", require("./routes/member.routes"));
+app.use("/api/health", require("./routes/health.routes"));
 
 app.get("/", (req, res) => {
   res.json({

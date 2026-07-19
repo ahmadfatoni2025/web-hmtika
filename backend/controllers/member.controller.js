@@ -44,7 +44,7 @@ exports.createMember = async (req, res) => {
     );
     res.status(201).json({ success: true, message: "Anggota berhasil ditambahkan", data: { id: result.insertId, name, division_id, photo_url } });
   } catch (error) {
-    if (error.code === "1451") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
+    if (error.code === "1452") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
     console.error(error);
     res.status(500).json({ success: false, message: "Gagal menambahkan anggota" });
   }
@@ -67,7 +67,7 @@ exports.updateMember = async (req, res) => {
     if (!result.affectedRows) return res.status(404).json({ success: false, message: "Anggota tidak ditemukan" });
     res.json({ success: true, message: "Anggota diperbarui" });
   } catch (error) {
-    if (error.code === "1451") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
+    if (error.code === "1452") return res.status(400).json({ success: false, message: "Divisi tidak valid" });
     res.status(500).json({ success: false, message: "Gagal memperbarui anggota" });
   }
 };

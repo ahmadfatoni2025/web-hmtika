@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import Link from "next/link"
+import { Zap, ArrowUpRight, Image as ImageIcon, MessageSquare } from "lucide-react"
 import Mockup from "./Mockup"
-import TombolActionHome from "./TombolActionHome"
 import LineWaves from "./LineWaves"
+import BorderGlow from "@/components/ui/BorderGlow"
 
 export default function HeroLayout() {
   const heroRef = useRef<HTMLDivElement>(null)
@@ -40,7 +42,7 @@ export default function HeroLayout() {
           brightness={0.15}
           color1="#d4a853"
           color2="#ffffff"
-          color3="#a3a3a3"
+          color3="#1291194"
           enableMouseInteraction={true}
           mouseInfluence={1.5}
         />
@@ -49,7 +51,7 @@ export default function HeroLayout() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 lg:px-8 text-center min-h-screen">
+      <div className="relative z-10 flex flex-col items-center px-4 mt-20 sm:px-6 lg:px-8 text-center min-h-screen">
         <div className="flex flex-col items-center justify-center flex-1 pt-32 pb-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-nice-black/50 backdrop-blur-sm px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-300 mb-6">
@@ -69,7 +71,52 @@ export default function HeroLayout() {
           </p>
 
           {/* CTA Buttons */}
-          <TombolActionHome />
+          <div className="flex items-center justify-center gap-4">
+            {/* Tombol Devcamp */}
+            <a
+              href="https://devcamp-hmtika-web-id.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <BorderGlow
+                glowColor="40 80 80"
+                colors={['#c084fc', '#f472b6', '#38bdf8']}
+                glowIntensity={1.0}
+                fillOpacity={0.5}
+                borderRadius={40}
+                rotateSpeed={0.21}
+              >
+                <span className="font-bold px-8 py-4 text-white inline-flex items-center gap-2.5">
+                  <Zap className="size-4.5 transition-all duration-500 ease-out group-hover:rotate-[12deg] group-hover:scale-110" />
+                  Devcamp
+                </span>
+              </BorderGlow>
+            </a>
+
+            {/* Tombol Gallery */}
+            <a
+              href="https://devcamp-hmtika-web-id.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <BorderGlow
+                glowColor="45 90 60"
+                backgroundColor="#1a1500"
+                colors={['#FFD700', '#FFA500', '#FF8C00']}
+                glowIntensity={1.2}
+                fillOpacity={0.6}
+                borderRadius={40}
+                rotateSpeed={0.2}
+              >
+                <span className="font-bold px-8 py-4 inline-flex items-center gap-2.5 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">
+                  <ImageIcon className="text-amber-gold size-4.5 transition-all duration-500 ease-out group-hover:rotate-[12deg] group-hover:scale-110" />
+                  Gallery
+                </span>
+              </BorderGlow>
+            </a>
+          </div>
         </div>
 
         {/* Mock Dashboard Card */}
@@ -77,6 +124,6 @@ export default function HeroLayout() {
           <Mockup />
         </div>
       </div>
-    </section>
+    </section >
   )
 }

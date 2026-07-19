@@ -71,8 +71,28 @@ export async function getEventBySlug(slug: string) {
   return fetchAPI<EventItem>(`/events/${slug}`)
 }
 
+export interface AuthUser {
+  id: number
+  nama: string
+  email: string
+  angkatan: string
+  prodi: string
+  role: string
+  status: string
+  foto?: string
+}
+
+export interface AuthResponse {
+  success: boolean
+  message: string
+  data: {
+    token: string
+    user: AuthUser
+  }
+}
+
 export async function login(email: string, password: string) {
-  return fetchAPI<{ token: string; user: unknown }>("/auth/login", {
+  return fetchAPI<AuthResponse>("/auth/login", {
     method: "POST",
     body: JSON.stringify({ email, password }),
   })
@@ -83,8 +103,9 @@ export async function register(data: {
   email: string
   password: string
   angkatan: string
+  prodi?: string
 }) {
-  return fetchAPI<{ token: string; user: unknown }>("/auth/register", {
+  return fetchAPI<AuthResponse>("/auth/register", {
     method: "POST",
     body: JSON.stringify(data),
   })

@@ -3,12 +3,13 @@ const db = require("../config/db");
 exports.createAttendance = async (req, res) => {
   try {
     const { eventId, namaSesi, waktuBuka, waktuTutup } = req.body;
+    const kodeAbsen = Math.random().toString(36).substring(2, 8).toUpperCase();
     const result = await db.query(
-      `INSERT INTO attendances (event_id, nama_sesi, waktu_buka, waktu_tutup)
-       VALUES (?, ?, ?, ?)`,
-      [eventId, namaSesi, new Date(waktuBuka), new Date(waktuTutup)]
+      `INSERT INTO attendances (event_id, nama_sesi, kode_absen, waktu_buka, waktu_tutup)
+       VALUES (?, ?, ?, ?, ?)`,
+      [eventId, namaSesi, kodeAbsen, new Date(waktuBuka), new Date(waktuTutup)]
     );
-    res.status(201).json({ success: true, message: "Sesi absensi dibuat", data: { id: result.insertId } });
+    res.status(201).json({ success: true, message: "Sesi absensi dibuat", data: { id: result.insertId, kode_absen: kodeAbsen } });
   } catch {
     res.status(500).json({ success: false, message: "Gagal membuat sesi absensi" });
   }

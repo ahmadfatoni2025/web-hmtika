@@ -106,7 +106,7 @@ exports.getAspirationStats = async (req, res) => {
       db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'pending'"),
       db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'reviewed'"),
       db.query("SELECT COUNT(*) AS count FROM aspirations WHERE status = 'resolved'"),
-      db.query("SELECT kategori, COUNT(*) FROM aspirations GROUP BY kategori"),
+      db.query("SELECT kategori, COUNT(*) AS count FROM aspirations GROUP BY kategori"),
     ]);
 
     res.json({
