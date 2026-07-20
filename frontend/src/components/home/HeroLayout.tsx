@@ -42,7 +42,7 @@ export default function HeroLayout() {
           brightness={0.15}
           color1="#d4a853"
           color2="#ffffff"
-          color3="#1291194"
+          color3="#129194"
           enableMouseInteraction={true}
           mouseInfluence={1.5}
         />
@@ -60,7 +60,7 @@ export default function HeroLayout() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-zinc-100 max-w-4xl mx-auto mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-zinc-100 max-w-4xl mx-auto mb-6 backdrop:to-black">
             Jangan lupa titik koma.
           </h1>
 

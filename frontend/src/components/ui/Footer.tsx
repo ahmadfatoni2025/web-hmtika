@@ -67,7 +67,7 @@ export default function Footer() {
                 />
 
                 <button className="rounded-r-lg bg-amber-gold px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-amber-gold-light">
-                  Langganan
+                  Kirim
                 </button>
               </div>
             </div>
