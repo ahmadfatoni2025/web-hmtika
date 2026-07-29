@@ -23,7 +23,7 @@ export interface EventItem {
   tanggal_akhir?: string
   lokasi: string
   kuota: number
-  biaya: number
+  biaya: string
   status?: string
   kategori?: string
   registration_count?: number

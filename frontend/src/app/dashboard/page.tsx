@@ -1,7 +1,5 @@
 import { getNews } from "@/lib/api/news"
 
-export const dynamic = "force-dynamic"
-
 export default async function Dashboard() {
   let news: { data: { id: number; judul: string; ringkasan: string }[] } = { data: [] }
 

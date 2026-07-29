@@ -29,8 +29,8 @@ export default function NewsPage() {
         const res = await getNews(page, 15, categoryQuery) // Fetch more items to distribute across columns
         if (res && res.data) {
           setNews(res.data)
-          if (res.total) {
-            setTotalPage(Math.ceil(res.total / 15))
+          if (res.meta.total) {
+            setTotalPage(Math.ceil(res.meta.total / 15))
           }
         }
       } catch (err) {
@@ -75,7 +75,7 @@ export default function NewsPage() {
 
       {/* Spacing for fixed Navbar */}
       <div className="pt-28 max-w-7xl mx-auto px-4 lg:px-8">
-        
+
         {/* ─── Search & Categories Filter bar (Quartz style, dark theme) ─── */}
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between pb-6 mb-8 border-b border-white/[0.08]">
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
@@ -86,11 +86,10 @@ export default function NewsPage() {
                   setSelectedCategory(cat)
                   setPage(1)
                 }}
-                className={`inline-flex items-center whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${
-                  selectedCategory === cat
+                className={`inline-flex items-center whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 ${selectedCategory === cat
                     ? "bg-amber-gold text-black shadow-md shadow-amber-gold/20"
                     : "text-zinc-400 hover:text-white hover:bg-white/5"
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -128,7 +127,7 @@ export default function NewsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
+
             {/* ─── Left Sidebar (Quartz style, dark theme) ─────────────────────────── */}
             <div className="lg:col-span-3 space-y-6">
               <div className="bg-white/[0.02] border border-white/[0.08] p-4 border-t-2 border-amber-gold rounded-xl">
@@ -138,7 +137,7 @@ export default function NewsPage() {
                 <p className="text-xs text-zinc-400 leading-relaxed mb-4">
                   Dapatkan rangkuman informasi akademik, kegiatan terbaru, dan pengumuman himpunan langsung di dashboard Anda.
                 </p>
-                <button 
+                <button
                   onClick={() => window.location.href = "/login"}
                   className="text-xs text-amber-gold hover:underline font-semibold"
                 >
@@ -244,7 +243,7 @@ export default function NewsPage() {
 
             {/* ─── Right Sidebar ─────────────────────────────────────────── */}
             <div className="lg:col-span-3 space-y-6">
-              
+
               {/* Popular Stories */}
               <div className="bg-white/[0.02] border border-white/[0.08] p-4 border-t-2 border-amber-gold rounded-xl space-y-4">
                 <h3 className="text-[11px] font-bold tracking-wider uppercase text-amber-gold">

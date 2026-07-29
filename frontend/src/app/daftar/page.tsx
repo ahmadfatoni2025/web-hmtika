@@ -59,19 +59,16 @@ export default function DaftarPage() {
         angkatan: form.angkatan,
         prodi: form.prodi,
       })
+      if (!res.success || !res.data) {
+        setError(res.message || "Pendaftaran gagal")
+        return
+      }
       localStorage.setItem("hmtika_token", res.data.token)
       localStorage.setItem("hmtika_user", JSON.stringify(res.data.user))
       setSuccess(true)
       setTimeout(() => router.push("/"), 1800)
-    } catch (err: unknown) {
-      const e = err as { message?: string }
-      if (e?.message?.includes("409")) {
-        setError("Email sudah terdaftar. Silakan gunakan email lain atau masuk.")
-      } else if (e?.message?.includes("400")) {
-        setError("Data tidak valid. Periksa kembali isian Anda.")
-      } else {
-        setError("Terjadi kesalahan. Silakan coba beberapa saat lagi.")
-      }
+    } catch {
+      setError("Terjadi kesalahan. Silakan coba beberapa saat lagi.")
     } finally {
       setLoading(false)
     }

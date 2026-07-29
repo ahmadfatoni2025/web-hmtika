@@ -225,7 +225,7 @@ export default function ExtrasFeature() {
                           {formatDate(item.tanggal)}
                         </td>
                         <td className="px-5 py-3 text-right text-xs font-semibold text-amber-gold">
-                          {item.biaya === 0 ? "Gratis" : `Rp${item.biaya.toLocaleString("id-ID")}`}
+                          {Number(item.biaya) === 0 ? "Gratis" : `Rp${Number(item.biaya).toLocaleString("id-ID")}`}
                         </td>
                       </tr>
                     ))

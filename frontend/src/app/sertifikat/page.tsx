@@ -173,7 +173,7 @@ export default function SertifikatPage() {
                   onClick={() => window.open(
                     cert.file_url.startsWith("http")
                       ? cert.file_url
-                      : `http://localhost:3001${cert.file_url}`,
+                      : `https://backend.web.h.lazismubanjarnegara.id${cert.file_url}`,
                     "_blank"
                   )}
                   className="group relative rounded-2xl bg-[#14171C] border border-white/[0.04] hover:border-amber-500/15 transition-all duration-500 cursor-pointer overflow-hidden"
@@ -232,7 +232,7 @@ export default function SertifikatPage() {
                           href={
                             cert.file_url.startsWith("http")
                               ? cert.file_url
-                              : `http://localhost:3001${cert.file_url}`
+                              : `https://backend.web.h.lazismubanjarnegara.id${cert.file_url}`
                           }
                           target="_blank"
                           rel="noopener noreferrer"

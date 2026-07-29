@@ -80,15 +80,15 @@ export default function Feature() {
 
                 if (newsRes?.data) {
                     setNews(newsRes.data)
-                    setTotalNews(newsRes.total || newsRes.data.length)
+                    setTotalNews(newsRes.meta.total || newsRes.data.length)
                 }
                 if (eventsRes?.data) {
                     setEvents(eventsRes.data)
-                    setTotalEvents(eventsRes.total || eventsRes.data.length)
+                    setTotalEvents(eventsRes.meta.total || eventsRes.data.length)
                 }
                 if (aspirationsRes?.data) {
                     setAspirations(aspirationsRes.data)
-                    setTotalAspirations(aspirationsRes.total || aspirationsRes.data.length)
+                    setTotalAspirations(aspirationsRes.meta.total || aspirationsRes.data.length)
                 }
             } catch (err) {
                 console.error("Error loading home page API data:", err)
@@ -130,7 +130,7 @@ export default function Feature() {
         lokasi: "Gedung Serbaguna",
         tanggal: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
         kuota: 100,
-        biaya: 0,
+        biaya: "0",
     }
 
     return (

@@ -35,12 +35,18 @@ function EventPageContent() {
     async function loadEvents() {
       setLoading(true)
       try {
-        const apiStatus = selectedStatus === "Semua" ? undefined : selectedStatus.toLowerCase()
+        const statusMap: Record<string, string | undefined> = {
+          Semua: undefined,
+          Upcoming: "akan_datang",
+          Ongoing: "berlangsung",
+          Completed: "selesai",
+        }
+        const apiStatus = statusMap[selectedStatus]
         const res = await getEvents(page, 15, apiStatus) // Fetch more for Quartz layout
         if (res && res.data) {
           setEvents(res.data)
-          if (res.total) {
-            setTotalPage(Math.ceil(res.total / 15))
+          if (res.meta.total) {
+            setTotalPage(Math.ceil(res.meta.total / 15))
           }
         }
       } catch (err) {
@@ -269,7 +275,7 @@ function EventPageContent() {
                         <span>•</span>
                         <span>{item.lokasi}</span>
                         <span>•</span>
-                        <span className="font-bold text-amber-gold">{item.biaya === 0 ? "Gratis" : `Rp ${item.biaya.toLocaleString("id-ID")}`}</span>
+                        <span className="font-bold text-amber-gold">{Number(item.biaya) === 0 ? "Gratis" : `Rp ${Number(item.biaya).toLocaleString("id-ID")}`}</span>
                       </div>
                     </div>
                   ))}
@@ -390,7 +396,7 @@ function EventPageContent() {
                   <MapPin className="h-3.5 w-3.5 shrink-0" />
                   <span>Lokasi: <span className="font-semibold text-white">{selectedEvent.lokasi}</span></span>
                 </div>
-                <div>💰 Biaya: <span className="text-amber-gold font-bold">{selectedEvent.biaya === 0 ? "Gratis" : `Rp ${selectedEvent.biaya.toLocaleString("id-ID")}`}</span></div>
+                <div>💰 Biaya: <span className="text-amber-gold font-bold">{Number(selectedEvent.biaya) === 0 ? "Gratis" : `Rp ${Number(selectedEvent.biaya).toLocaleString("id-ID")}`}</span></div>
                 <div className="flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 shrink-0" />
                   <span>Tanggal: <span className="text-white">{formatDate(selectedEvent.tanggal)}</span></span>

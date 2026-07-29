@@ -1,13 +1,14 @@
+Oimport { get } from "http"
+
 export interface NewsItem {
+  data: NewsItem
   id: number
   slug: string
   judul: string
   ringkasan: string
   kategori: string
-  status: string
   tglPublish?: string
   createdAt?: string
-  updatedAt?: string
   thumbnail?: string
   konten?: string
   author?: {
@@ -18,36 +19,27 @@ export interface NewsItem {
 }
 
 export interface EventItem {
+  data: EventItem
   id: number
   slug: string
   judul: string
+  lokasi: string
+  tanggal: string
+  kuota: number
+  biaya: number
   deskripsi?: string
   thumbnail?: string
-  tanggal: string
-  tanggal_akhir?: string
-  lokasi: string
-  kuota: number
-  biaya: string
+  tanggalAkhir?: string
   status?: string
   kategori?: string
   registration_count?: number
-  created_at?: string
-  updated_at?: string
-}
-
-export interface ApiResponse<T> {
-  success: boolean
-  data: T
 }
 
 export interface PaginatedResponse<T> {
-  success: boolean
   data: T[]
-  meta: {
-    total: number
-    page: number
-    limit: number
-  }
+  total: number
+  page: number
+  limit: number
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://backend.web.h.lazismubanjarnegara.id/api"
@@ -68,7 +60,7 @@ export async function getNews(page = 1, limit = 10, kategori?: string) {
 }
 
 export async function getNewsBySlug(slug: string) {
-  return fetchAPI<ApiResponse<NewsItem>>(`/news/${slug}`)
+  return fetchAPI<NewsItem>(`/news/${slug}`)
 }
 
 export async function getEvents(page = 1, limit = 9, status?: string) {
@@ -78,7 +70,7 @@ export async function getEvents(page = 1, limit = 9, status?: string) {
 }
 
 export async function getEventBySlug(slug: string) {
-  return fetchAPI<ApiResponse<EventItem>>(`/events/${slug}`)
+  return fetchAPI<EventItem>(`/events/${slug}`)
 }
 
 export interface AuthUser {
@@ -95,7 +87,7 @@ export interface AuthUser {
 export interface AuthResponse {
   success: boolean
   message: string
-  data?: {
+  data: {
     token: string
     user: AuthUser
   }
@@ -136,7 +128,7 @@ export interface AspirationItem {
   id: number
   kategori: string
   isiAspirasi: string
-  isAnonymous: number
+  isAnonymous: boolean
   status: string
   responAdmin?: string
   createdAt: string

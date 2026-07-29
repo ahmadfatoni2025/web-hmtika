@@ -53,11 +53,6 @@ export default function HeroLayout() {
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center px-4 mt-20 sm:px-6 lg:px-8 text-center min-h-screen">
         <div className="flex flex-col items-center justify-center flex-1 pt-32 pb-8">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-nice-black/50 backdrop-blur-sm px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-300 mb-6">
-            <span>Official Website</span>
-            <span className="text-amber-gold">HMTIKA STB</span>
-          </div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-zinc-100 max-w-4xl mx-auto mb-6 backdrop:to-black">

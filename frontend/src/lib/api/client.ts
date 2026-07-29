@@ -21,7 +21,7 @@ export interface PaginatedResponse<T> {
 }
 
 // ─── API Client ──────────────────────────────────────────────────
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api"
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://backend.web.h.lazismubanjarnegara.id/api"
 
 /**
  * Generic fetch wrapper.

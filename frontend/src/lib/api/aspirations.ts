@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api";
+import { API_URL } from "./client"
 
 export async function getAspirations() {
     const res = await fetch(`${API_URL}/aspirations`);

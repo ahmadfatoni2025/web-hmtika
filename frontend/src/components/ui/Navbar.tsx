@@ -10,12 +10,12 @@ import LineSidebar from "./LineSidebar"
 
 const navLinks = [
   { label: "Beranda", href: "/" },
-  { label: "Event", href: "/event" },
-  { label: "Berita", href: "/berita" },
-  { label: "Galeri", href: "/galery" },
-  { label: "Devisi", href: "/devisi" },
-  { label: "Aspirasi", href: "/aspirasi" },
-  { label: "Sertifikat", href: "/sertifikat" },
+  { label: "Event", href: "/event/" },
+  { label: "Berita", href: "/berita/" },
+  { label: "Galeri", href: "/galery/" },
+  { label: "Devisi", href: "/devisi/" },
+  { label: "Aspirasi", href: "/aspirasi/" },
+  { label: "Sertifikat", href: "/sertifikat/" },
 ]
 
 export default function Navbar() {

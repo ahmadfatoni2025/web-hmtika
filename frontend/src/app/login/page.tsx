@@ -29,21 +29,19 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const res = await login(email.trim(), password)
+      if (!res.success || !res.data) {
+        setError(res.message || "Email atau kata sandi salah")
+        return
+      }
       localStorage.setItem("hmtika_token", res.data.token)
       localStorage.setItem("hmtika_user", JSON.stringify(res.data.user))
-      const user = res.data.user as { role?: string }
-      if (user?.role === "admin") {
+      if (res.data.user.role === "admin") {
         router.push("/admin")
       } else {
         router.push("/")
       }
-    } catch (err: unknown) {
-      const e = err as { message?: string }
-      if (e?.message?.includes("401") || e?.message?.includes("400")) {
-        setError("Email atau kata sandi salah. Silakan coba lagi.")
-      } else {
-        setError("Terjadi kesalahan. Silakan coba beberapa saat lagi.")
-      }
+    } catch {
+      setError("Terjadi kesalahan. Silakan coba beberapa saat lagi.")
     } finally {
       setLoading(false)
     }

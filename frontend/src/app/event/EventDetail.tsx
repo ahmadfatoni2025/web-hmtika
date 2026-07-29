@@ -158,7 +158,7 @@ export default function EventDetail({ slug }: { slug: string }) {
             <div>
               <p className="text-[10px] text-zinc-500 uppercase font-extrabold tracking-wider">Biaya Pendaftaran</p>
               <p className="text-sm font-bold text-amber-gold mt-0.5">
-                {event.biaya === 0 ? "Gratis" : `Rp ${event.biaya.toLocaleString("id-ID")}`}
+                {Number(event.biaya) === 0 ? "Gratis" : `Rp ${Number(event.biaya).toLocaleString("id-ID")}`}
               </p>
             </div>
           </div>
@@ -207,15 +207,15 @@ export default function EventDetail({ slug }: { slug: string }) {
               <div className="pt-2">
                 <h4 className="text-xs font-bold text-zinc-500 tracking-wider uppercase">Tiket Masuk</h4>
                 <p className="font-sans text-xl font-bold mt-2 text-white">
-                  {event.biaya === 0 ? "Gratis" : `Rp ${event.biaya.toLocaleString("id-ID")}`}
+                  {Number(event.biaya) === 0 ? "Gratis" : `Rp ${Number(event.biaya).toLocaleString("id-ID")}`}
                 </p>
               </div>
               <button 
                 onClick={() => window.location.href = "/login"}
-                disabled={event.status === "completed"}
+                disabled={event.status === "selesai"}
                 className="mt-4 bg-amber-gold text-black hover:bg-amber-gold-light disabled:bg-white/5 disabled:text-zinc-500 font-bold text-xs py-1.5 px-4 rounded w-full transition-colors uppercase tracking-wider"
               >
-                {event.status === "completed" ? "Event Selesai" : "Daftar Sekarang"}
+                {event.status === "selesai" ? "Event Selesai" : "Daftar Sekarang"}
               </button>
             </div>
           </div>
