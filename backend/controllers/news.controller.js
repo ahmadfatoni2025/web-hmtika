@@ -15,11 +15,11 @@ exports.getAllNews = async (req, res) => {
     const params = [];
 
     if (kategori) {
-      where += ` AND n.kategori = ?`;
+      where += " AND n.kategori = ?";
       params.push(kategori);
     }
     if (search) {
-      where += ` AND n.judul LIKE ?`;
+      where += " AND n.judul LIKE ?";
       params.push(`%${search}%`);
     }
 

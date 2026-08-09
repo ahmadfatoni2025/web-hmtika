@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import Link from "next/link"
-import { Zap, ArrowUpRight, Image as ImageIcon, MessageSquare } from "lucide-react"
-import Mockup from "./Mockup"
-import LineWaves from "./LineWaves"
-import BorderGlow from "@/components/ui/BorderGlow"
+import { useEffect, useRef } from "react";
+import { Zap, ArrowUpRight, Image as ImageIcon, MessageSquare } from "lucide-react";
+import Mockup from "./Mockup";
+import LineWaves from "./LineWaves";
+import BorderGlow from "@/components/ui/BorderGlow";
+import SplitFlapText from "@/components/ui/SplitFlapText";
 
 export default function HeroLayout() {
-  const heroRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    el.style.opacity = "0"
-    el.style.transform = "translateY(20px)"
+    const el = heroRef.current;
+    if (!el) return;
+    el.style.opacity = "0";
+    el.style.transform = "translateY(20px)";
     requestAnimationFrame(() => {
       el.style.transition =
-        "opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)"
-      el.style.opacity = "1"
-      el.style.transform = "translateY(0)"
-    })
-  }, [])
+        "opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1), transform 1.1s cubic-bezier(0.16, 1, 0.3, 1)";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    });
+  }, []);
 
   return (
     <section
@@ -53,10 +53,23 @@ export default function HeroLayout() {
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center px-4 mt-20 sm:px-6 lg:px-8 text-center min-h-screen">
         <div className="flex flex-col items-center justify-center flex-1 pt-32 pb-8">
-
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight text-zinc-100 max-w-4xl mx-auto mb-6 backdrop:to-black">
-            Jangan lupa titik koma.
+          <h1 className="max-w-4xl mx-auto mb-6">
+            <SplitFlapText
+              words={["KOLABORASI", "INOVASI", "TEKNOLOGI MASA DEPAN"]}
+              flipDuration={0.12}
+              stagger={0.06}
+              cycleDelay={2400}
+              charset="alphanumeric"
+              flipsPerChar={8}
+              tileColor="#0a0a0a"
+              textColor="#f4f4f5"
+              tileRadius={8}
+              gap={6}
+              fontSize="clamp(2.25rem, 6vw, 4.25rem)"
+              loop
+              padTo={20}
+            />
           </h1>
 
           {/* Subtitle */}
@@ -119,6 +132,6 @@ export default function HeroLayout() {
           <Mockup />
         </div>
       </div>
-    </section >
-  )
+    </section>
+  );
 }

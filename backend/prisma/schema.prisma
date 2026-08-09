@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model users {
+  id            BigInt    @id @default(autoincrement())
+  nama          String    @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
+  password      String    @db.VarChar(255)
+  angkatan      String?   @db.VarChar(50)
+  prodi         String?   @db.VarChar(100) @default("Informatika")
+  role          String?   @db.VarChar(50) @default("user")
+  status        String?   @db.VarChar(50) @default("active")
+  foto          String?   @db.Text
+  created_at    DateTime? @default(now()) @db.Timestamp
+  updated_at    DateTime? @default(now()) @db.Timestamp
+
+  news          news[]
+  registrations registrations[]
+  aspirations   aspirations[]
+  attendance_logs attendance_logs[]
+}
+
+model news {
+  id          BigInt    @id @default(autoincrement())
+  judul       String    @db.VarChar(255)
+  slug        String    @unique @db.VarChar(255)
+  konten      String?   @db.Text
+  ringkasan   String?   @db.Text
+  thumbnail   String?   @db.Text
+  kategori    String?   @db.VarChar(100) @default("Umum")
+  status      String?   @db.VarChar(50) @default("draft")
+  author_id   BigInt?
+  tgl_publish DateTime? @db.Timestamp
+  created_at  DateTime? @default(now()) @db.Timestamp
+  updated_at  DateTime? @default(now()) @db.Timestamp
+
+  author      users?    @relation(fields: [author_id], references: [id], onDelete: SetNull)
+}
+
+model events {
+  id            BigInt          @id @default(autoincrement())
+  judul         String          @db.VarChar(255)
+  slug          String          @unique @db.VarChar(255)
+  deskripsi     String?         @db.Text
+  thumbnail     String?         @db.Text
+  tanggal       DateTime        @db.Timestamp
+  tanggal_akhir DateTime?       @db.Timestamp
+  lokasi        String?         @db.VarChar(255)
+  kuota         Int?            @default(0)
+  biaya         Decimal?        @default(0) @db.Decimal(12, 2)
+  status        String?         @db.VarChar(50) @default("akan_datang")
+  kategori      String?         @db.VarChar(100)
+  created_at    DateTime?       @default(now()) @db.Timestamp
+  updated_at    DateTime?       @default(now()) @db.Timestamp
+
+  registrations registrations[]
+  attendances   attendances[]
+}
+
+model registrations {
+  id          BigInt         @id @default(autoincrement())
+  event_id    BigInt
+  user_id     BigInt
+  status_hadir String?        @db.VarChar(50) @default("tidak_hadir")
+  tgl_daftar  DateTime?      @default(now()) @db.Timestamp
+  created_at  DateTime?      @default(now()) @db.Timestamp
+
+  event       events         @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  user        users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  e_certificates e_certificates[]
+
+  @@unique([event_id, user_id])
+}
+
+model aspirations {
+  id          BigInt    @id @default(autoincrement())
+  kategori    String    @db.VarChar(100)
+  isi_aspirasi String   @db.Text
+  is_anonymous Int?     @default(0) @db.TinyInt
+  user_id     BigInt?
+  status      String?   @db.VarChar(50) @default("pending")
+  respon_admin String?  @db.Text
+  created_at  DateTime? @default(now()) @db.Timestamp
+  updated_at  DateTime? @default(now()) @db.Timestamp
+
+  user        users?    @relation(fields: [user_id], references: [id], onDelete: SetNull)
+}
+
+model attendances {
+  id          BigInt           @id @default(autoincrement())
+  event_id    BigInt
+  nama_sesi   String           @db.VarChar(255)
+  kode_absen  String           @unique @db.VarChar(10)
+  waktu_buka  DateTime         @db.Timestamp
+  waktu_tutup DateTime         @db.Timestamp
+  created_at  DateTime?        @default(now()) @db.Timestamp
+
+  event       events           @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  attendance_logs attendance_logs[]
+}
+
+model attendance_logs {
+  id            BigInt     @id @default(autoincrement())
+  attendance_id BigInt
+  user_id       BigInt
+  waktu_absen   DateTime?  @default(now()) @db.Timestamp
+
+  attendance    attendances @relation(fields: [attendance_id], references: [id], onDelete: Cascade)
+  user          users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([attendance_id, user_id])
+}
+
+model e_certificates {
+  id          BigInt   @id @default(autoincrement())
+  reg_id      BigInt
+  nomor_sertif String  @unique @db.VarChar(100)
+  file_url    String   @db.Text
+  tgl_terbit  DateTime? @default(now()) @db.Timestamp
+  created_at  DateTime? @default(now()) @db.Timestamp
+
+  registration registrations @relation(fields: [reg_id], references: [id], onDelete: Cascade)
+}
+
+model images {
+  id          BigInt    @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  image_url   String    @db.Text
+  created_at  DateTime? @default(now()) @db.Timestamp
+}
+
+model divisions {
+  id          BigInt    @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String?   @db.Text
+  created_at  DateTime? @default(now()) @db.Timestamp
+  updated_at  DateTime? @default(now()) @db.Timestamp
+
+  members     members[]
+}
+
+model members {
+  id              BigInt    @id @default(autoincrement())
+  name            String    @db.VarChar(255)
+  division_id     BigInt
+  photo_url       String    @db.Text
+  social_media_url String?  @db.Text
+  description     String?   @db.Text
+  created_at      DateTime? @default(now()) @db.Timestamp
+  updated_at      DateTime? @default(now()) @db.Timestamp
+
+  division        divisions @relation(fields: [division_id], references: [id], onDelete: Cascade)
+}

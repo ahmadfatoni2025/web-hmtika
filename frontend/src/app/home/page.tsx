@@ -6,6 +6,7 @@ import Feature from "@/components/home/Feature"
 import ExtrasFeature from "@/components/home/ExtrasFeature"
 import BentoDocs from "@/components/home/BentoDocs"
 import FAQ from "@/components/home/FAQ"
+import ParalaxImage from "@/components/home/ParalaxImage"
 
 export default function Home() {
   return (
@@ -20,6 +21,9 @@ export default function Home() {
 
       {/* ── FEATURES GRID SECTION (Populated from API) ── */}
       <Feature />
+
+      {/* paralax images */}
+      <ParalaxImage />
 
       {/* ── EXTRAS / BENCHMARKS SECTION ── */}
       <ExtrasFeature />
